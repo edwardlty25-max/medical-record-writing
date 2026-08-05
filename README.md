@@ -2,7 +2,7 @@
 
 > **⚠ 免责声明**：本工具为**执业医师**的文书书写与临床决策支持辅助，输出不构成医学建议，不替代主治医师的独立判断；**不得用于患者自我诊疗**。用药须核对禁忌、过敏史、肝肾功能与药物相互作用；指南摘要基于公开资料，请以最新指南原文为准。
 
-本地 Claude Code / Codex 插件（Codex 侧以 `~/.codex/skills` 目录或 junction 方式加载），面向执业医师，提供**双模式**：
+本地 Claude Code / Codex 插件（Codex 侧以 `~/.codex/skills` 目录加载），面向执业医师，提供**双模式**：
 
 - **模式 A · 病历书写**：把口述、草稿笔记、检查结果整理成标准病历文书。规范基准为**《河北省病历书写规范细则（2013年版）》（冀卫办医政〔2013〕30号）**为主体、**2023 修订要点**为补充，书写逻辑参考**协和优秀病历标准**。
 - **模式 B · 病情分析与治疗方案指导**：在已有**文字或图片**（化验单、检查报告照片等）基础上，分析病情、鉴别诊断、给出**符合最新内科指南**的治疗方案建议。
@@ -22,7 +22,7 @@
 ## 分析模式（模式 B）
 
 - 流程：references/case-analysis.md
-- 指南：references/guidelines/ —— 覆盖 10 个亚专业、50+ 病种要点（2026-08-05 已核对并扩充最新版本）。
+- 指南：references/guidelines/ —— 覆盖 10 个亚专业、80+ 病种要点（2026-08-06 二次核对扩充，优先中华医学会系列指南）。
 
 ## 使用方式
 
@@ -45,9 +45,6 @@ claude plugin marketplace add edwardlty25-max/medical-record-writing
 claude plugin install medical-record-writing@medical-record-writing
 ```
 
-**方式二 · 本地 skills-dir（开发者本人）：**
-克隆/复制本目录到 `~/.claude/skills/medical-record-writing/`，以 `medical-record-writing@skills-dir` 自动加载。
-
 **更新：** 作者推送新版本后，使用者运行：
 ```bash
 claude plugin marketplace update medical-record-writing
@@ -58,25 +55,19 @@ claude plugin update medical-record-writing   # 重启后生效
 
 Codex 从 `$CODEX_HOME/skills/`（默认 `~/.codex/skills/`）加载技能；技能目录只要包含 `SKILL.md` 即可被自动发现，**不需要** `.claude-plugin/` 清单。
 
-**方式一 · 直接安装（最简单）：**
+**直接安装：**
 ```powershell
 git clone https://github.com/edwardlty25-max/medical-record-writing.git "$env:USERPROFILE\.codex\skills\medical-record-writing"
 ```
 或手动复制本目录到 `~/.codex/skills/medical-record-writing/`。
 
-**方式二 · junction 共享（作者本人方式，开发者推荐）：**
-保持一个物理目录（如 `~/.claude/skills/medical-record-writing/`）为唯一真源，Codex 侧用 junction 直连，两边自动同步：
-```powershell
-New-Item -ItemType Junction -Path "$env:USERPROFILE\.codex\skills\medical-record-writing" -Target "$env:USERPROFILE\.claude\skills\medical-record-writing"
-```
+**Codex 更新：** 在 `~/.codex/skills/medical-record-writing/` 目录执行 `git pull`（或重新克隆/复制）。重启 Codex 会话后生效。
 
-**Codex 更新：** 在物理目录执行 `git pull`（或重新克隆/复制）；junction 模式下 Claude 侧与 Codex 侧同步更新。重启 Codex 会话后生效。
-
-**Codex 卸载：** 删除 `~/.codex/skills/medical-record-writing/`（junction 模式先删除 junction，再决定是否删除物理目录）。
+**Codex 卸载：** 删除 `~/.codex/skills/medical-record-writing/` 目录即可。
 
 ## 重要说明
 
-- **指南使用**：捆绑摘要为基础，采用"先输出、后核对、按需深挖"策略——常见病用捆绑摘要直接作答，版本做轻量核对，高危/未覆盖病种才联网深挖，检索失败以"版本待核实"标注兜底（见 references/guidelines/README.md）。捆绑摘要已按 2026-08-05 核对更新。
+- **指南使用**：捆绑摘要为基础，采用"先输出、后核对、按需深挖"策略——常见病用捆绑摘要直接作答，版本做轻量核对，高危/未覆盖病种才联网深挖，检索失败以"版本待核实"标注兜底（见 references/guidelines/README.md）。捆绑摘要已按 2026-08-06 二次核对扩充。
 - **安全边界**：模式 B 为临床决策支持，不替代主治医师判断；不虚构数据；危重征象优先警示；不面向患者使用。
 
 ## 开发说明
