@@ -1,0 +1,23 @@
+{
+  "name": "medical-record-writing",
+  "owner": {
+    "name": "edwardlty25-max",
+    "url": "https://github.com/edwardlty25-max"
+  },
+  "description": "内科病历书写与病情分析 Claude Code 插件（河北规范 + 协和逻辑 + 全内科亚专业指南）",
+  "plugins": [
+    {
+      "name": "medical-record-writing",
+      "source": "./",
+      "description": "内科病历书写与病情分析助手：双模式，含入院记录/首次病程/日常病程/出院记录等模板与 10 个内科亚专业指南摘要",
+      "category": "healthcare",
+      "keywords": [
+        "病历",
+        "医疗记录",
+        "内科",
+        "guidelines",
+        "clinical-note"
+      ]
+    }
+  ]
+}

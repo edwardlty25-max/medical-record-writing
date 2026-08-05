@@ -1,0 +1,14 @@
+# 系统文件
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# 临时文件
+*.tmp
+*.log
+*.swp
+
+# 本仓库不应包含的内容
+*.pem
+*.key
+.env
