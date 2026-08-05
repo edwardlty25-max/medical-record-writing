@@ -39,7 +39,7 @@
 
 ### Claude Code
 
-**方式一 · GitHub Marketplace（推荐给他人）：**
+**GitHub Marketplace（推荐）：**
 ```bash
 claude plugin marketplace add edwardlty25-max/medical-record-writing
 claude plugin install medical-record-writing@medical-record-writing
@@ -74,4 +74,4 @@ git clone https://github.com/edwardlty25-max/medical-record-writing.git "$env:US
 
 - 结构：`.claude-plugin/plugin.json` 与 `marketplace.json` 为 Claude 插件清单；`SKILL.md` 为主指令（双模式速览）；`references/` 为模板、规范与指南。Codex 侧无需 `.claude-plugin/`，直接以目录形式加载 `SKILL.md`。
 - 版本：v1.0.0 · 作者 edwardlty25-max（MIT License）
-- Claude Code 禁用本地副本：`claude plugin disable medical-record-writing@skills-dir`；删除目录即卸载。
+- 卸载：删除本地安装目录即卸载（Marketplace 安装者使用 claude plugin 对应命令）。
