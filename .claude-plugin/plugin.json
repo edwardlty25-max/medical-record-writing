@@ -1,8 +1,8 @@
 {
   "$schema": "https://anthropic.com/claude-code/plugin.schema.json",
   "name": "medical-record-writing",
-  "version": "1.0.0",
-  "description": "内科病历书写与病情分析助手——按《河北省病历书写规范细则（2013年版）》及2023修订要点，融入协和优秀病历逻辑；双模式：病历书写 + 病情分析与治疗方案指导（含全内科亚专业指南）。",
+  "version": "1.1.0",
+  "description": "面向执业医师的内科病历书写与病情分析助手：提供中文病历模板、质控规则、鉴别诊断框架与风险分层的指南核验流程。",
   "author": {
     "name": "edwardlty25-max",
     "url": "https://github.com/edwardlty25-max"
