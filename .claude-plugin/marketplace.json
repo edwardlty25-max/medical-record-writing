@@ -9,7 +9,7 @@
     {
       "name": "medical-record-writing",
       "source": "./",
-      "description": "双模式内科病历助手，包含常用文书模板、质控规则、鉴别诊断框架与风险分层指南核验",
+      "description": "轻量双模式内科病历助手，包含快速病程、诊断层级、治疗计划、鉴别诊断与按需指南核验",
       "category": "healthcare",
       "keywords": [
         "病历",

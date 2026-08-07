@@ -1,8 +1,8 @@
 {
   "$schema": "https://anthropic.com/claude-code/plugin.schema.json",
   "name": "medical-record-writing",
-  "version": "1.1.0",
-  "description": "面向执业医师的内科病历书写与病情分析助手：提供中文病历模板、质控规则、鉴别诊断框架与风险分层的指南核验流程。",
+  "version": "1.3.1",
+  "description": "面向执业医师的轻量内科病历助手：快速生成中文病程，提供诊断层级、治疗计划、鉴别诊断与按需指南核验。",
   "author": {
     "name": "edwardlty25-max",
     "url": "https://github.com/edwardlty25-max"
