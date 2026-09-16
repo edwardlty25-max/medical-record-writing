@@ -17,3 +17,7 @@ jobs:
         run: python scripts/check_links.py
       - name: 校验器回归测试
         run: python scripts/run_tests.py
+      - name: 一致性与结构检查
+        run: python scripts/check_consistency.py
+      - name: 隐私扫描（含检测器自检）
+        run: python scripts/check_privacy.py --self-test && python scripts/check_privacy.py

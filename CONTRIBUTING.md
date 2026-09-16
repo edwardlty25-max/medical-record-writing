@@ -20,9 +20,13 @@
 ## 本地自检（提交前必跑）
 
 ```bash
-python scripts/check_links.py     # 链接与 frontmatter
-python scripts/run_tests.py       # 校验器回归测试
+python scripts/check_links.py       # 链接与 frontmatter
+python scripts/check_consistency.py # 版本/结构/时限/可达性/YAML
+python scripts/check_privacy.py      # 隐私扫描（--self-test 可验证检测器）
+python scripts/run_tests.py          # 校验器回归测试
 ```
+
+**版本号约定**：`plugin.json` 是唯一事实源；发布时同步 `SKILL.md` frontmatter、`README.md` 版本行、5 个模板顶部标注与 `CHANGELOG`（不一致会被 `check_consistency.py` 拦下）。
 
 ## 修改规范类文件的流程
 

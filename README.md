@@ -11,6 +11,8 @@
 
 ## 快速开始
 
+> 一屏速查：[assets/quick-card.md](assets/quick-card.md)（最小输入 · 输出约定 · 出稿后自检命令）
+
 1. 直接把口述或草稿发给本技能（例如：「写今天的日常病程，3 床老王……」）。需要哪些字段可参考 [assets/intake-form.md](assets/intake-form.md)，**整段口述即可，无需按格式填写**。
 2. 技能输出**可直接粘贴进 HIS 的正文**；缺信息标【待补充】，或在出稿前最多追问 3 个关键问题。可另附一行自检结论，正文之外的辅助块仅在索取时输出。
 3. 需要确定性自检时（本仓库自带，无第三方依赖）：
@@ -35,7 +37,7 @@ python scripts/validate_note.py 正文.txt --kind progress --admit "2026-09-16 0
 | 书写规范（2013 年版规范 + 协和逻辑） | references/rules.md |
 | 协和病历书写逻辑专题 | references/pumch-style.md |
 | 输入字段清单 | assets/intake-form.md |
-| 成稿示例（虚构数据） | references/examples/daily-progress-example.md |
+| 成稿示例（虚构数据） | daily-progress-example.md · first-progress-example.md · discharge-example.md（references/examples/） |
 
 ## 可选旁路（分析与治疗）
 
@@ -103,5 +105,5 @@ WorkBuddy 使用与 Claude Code 相同的标准 `SKILL.md` 技能目录；本仓
 
 - 结构：`.claude-plugin/plugin.json` 与 `marketplace.json` 为 Claude 插件清单；`SKILL.md` 为主指令（快路径 + 输出契约 + 硬红线）；`assets/intake-form.md` 为输入字段清单；`references/` 为模板、规范（含「来源与核验状态」）、安全边界、示例与指南；`scripts/` 为确定性自检与工程校验；`tests/` 为回归用例；`.github/workflows/validate.yml` 为 CI。Codex 侧无需 `.claude-plugin/`，直接以目录形式加载 `SKILL.md`（另见 `AGENTS.md`）。
 - 协作：贡献前请读 `CONTRIBUTING.md`；变更记录见 `CHANGELOG.md`；规范纠错请用 issue 模板。
-- 版本：v1.5.0 · 作者 edwardlty25-max（MIT License）
+- 版本：v1.11.0 · 作者 edwardlty25-max（MIT License）
 - 卸载：删除本地安装目录即卸载（Marketplace 安装者使用 claude plugin 对应命令）。

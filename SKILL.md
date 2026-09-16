@@ -1,7 +1,7 @@
 ---
 name: medical-record-writing
 description: 面向中国执业医师的内科病历书写加速器。当医生说“写病历”“写入院记录”“写首程”“写病程”“写查房记录”“写交班”“写出院小结”“写转科记录”“整理成病历”“这块病历帮我顺一下”“按河北规范写”，或粘贴口述、草稿、化验与检查结果要求成文时使用。默认输出可直接粘贴进 HIS 的病历正文，并自动执行规范硬红线自检（主诉≤20字、单项否决时限、计量单位、药品通用名、签名与未填占位）。病情分析、诊断依据、鉴别诊断与治疗方案属于可选旁路，仅在医生明确要求时启用。不用于患者自我诊疗。
-version: 1.4.0
+version: 1.11.0
 author: edwardlty25-max
 license: MIT
 metadata:
@@ -14,6 +14,8 @@ metadata:
 **主旨**：把医生给的零散事实（口述、草稿、粘贴的化验与检查结果）在**一次交互内**转成**可直接粘贴进 HIS 的规范病历正文**，并在出稿前跑一遍**确定性规范自检**。
 
 本技能不代替医师诊断、处方、签名或医院审核；医院现行制度与有效法规优先于本捆绑摘要。
+
+**急着用？** 先看 [assets/quick-card.md](assets/quick-card.md)——一屏：最小输入、输出约定、出稿后自检命令。
 
 ## 一、用与不用
 
@@ -73,7 +75,7 @@ metadata:
 | 格式、时限、签名、修改与质控；规范来源与核验状态 | [references/rules.md](references/rules.md) |
 | 优秀病历标准与内涵质量（逐文书逻辑见对应模板） | [references/pumch-style.md](references/pumch-style.md) |
 | 输入字段清单 | [assets/intake-form.md](assets/intake-form.md) |
-| 成稿样式示例（虚构数据） | [references/examples/daily-progress-example.md](references/examples/daily-progress-example.md) |
+| 成稿样式示例（虚构数据） | 日常病程 [daily-progress-example.md](references/examples/daily-progress-example.md) · 首程 [first-progress-example.md](references/examples/first-progress-example.md) · 出院 [discharge-example.md](references/examples/discharge-example.md) |
 
 **最常用的一种写法（日常病程）**：客观输入（一般情况 / 查体 / 检查 / 会诊）原样整合 → 由本技能补足“分析判断 + 诊疗计划 + 医患沟通” → 成一段通顺文字。重病或病情变化当日必记，不得只写“病情平稳、继续原治疗”。
 

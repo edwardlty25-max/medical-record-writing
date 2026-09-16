@@ -4,6 +4,23 @@
 
 ## [Unreleased]
 
+## [1.11.0] - 2026-09-16
+
+### Added
+- `scripts/check_consistency.py`：一致性门禁——版本号（以 plugin.json 为准）、模板结构、**单项否决时限三处比对**（rules.md ↔ validate_note.py ↔ SKILL.md）、文件可达性、YAML 字段块 lint、指南核验时效（>90 天提醒）。
+- `scripts/check_privacy.py`（含 `--self-test`）：身份证 / 手机号 / 住院号 / 真实姓名样式扫描，合成标记白名单。
+- `assets/quick-card.md`：**临床快用卡**——最小输入、输出约定、三个最常用现场、出稿后自检、三个最常见的坑。
+
+### Fixed
+- `references/transfer-and-death.md` 补回缺失的「书写要点」章节（v1.8.0 曾静默失败），并统一为「要点 / 模板 / 缺陷 / 自检」结构。
+- 版本号统一至 1.11.0（此前 SKILL.md=1.4.0、README=v1.5.0、plugin.json=1.10.0 三处漂移）。
+- `references/examples/first-progress-example.md` 由孤儿文件变为可从 SKILL.md / README 直达。
+- `references/progress-note.md` 增加 `## 模板（按文书类型）` 分节，与其余模板结构对齐。
+
+### Changed
+- CI 增加「一致性与结构检查」「隐私扫描（含检测器自检）」两步。
+
+
 ## [1.10.0] - 2026-09-16
 
 ### Added

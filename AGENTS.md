@@ -27,5 +27,5 @@
 4. 提交前运行：
 
 ```bash
-python scripts/check_links.py && python scripts/run_tests.py
+python scripts/check_links.py && python scripts/check_consistency.py && python scripts/check_privacy.py && python scripts/run_tests.py
 ```

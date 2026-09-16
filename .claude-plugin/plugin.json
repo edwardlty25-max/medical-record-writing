@@ -1,7 +1,7 @@
 {
   "$schema": "https://anthropic.com/claude-code/plugin.schema.json",
   "name": "medical-record-writing",
-  "version": "1.10.0",
+  "version": "1.11.0",
   "description": "面向执业医师的内科病历书写加速器：口述/草稿一次成稿、可直接粘贴进 HIS，并内置规范硬红线自检；另附可选的诊断与治疗分析旁路。",
   "author": {
     "name": "edwardlty25-max",
