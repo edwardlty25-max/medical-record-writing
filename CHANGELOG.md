@@ -4,6 +4,17 @@
 
 ## [Unreleased]
 
+## [1.6.0] - 2026-09-16
+
+### Added
+- `references/discharge-summary.md` 重写：优秀出院小结 **7 步书写逻辑**（基线→定调→立据→时间线→演变→问题线→收口）、优化模板、出院医嘱四类要素、10 条常见缺陷、人工自检清单。
+- `tests/cases/timepoint-false-positive.txt`：回归用例，锁定“采样时点不得判为时间未精确到分”。
+
+### Fixed
+- `scripts/validate_note.py`：修正 `HOUR_RE` 误报——“皮质醇（8 点）”等采样时点不再提示“时间未精确到分”。
+- `SKILL.md`、`README.md`：出院记录条目注明含书写逻辑与自检清单。
+
+
 ## [1.5.0] - 2026-09-16
 
 ### Added

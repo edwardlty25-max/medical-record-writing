@@ -6,6 +6,8 @@
     { "file": "bad-deadline.txt", "kind": "first-progress", "admit": "2026-09-16 08:00", "expect_exit": 1,
       "expect_codes": ["deadline", "vitals_missing"] },
     { "file": "warn-only.txt", "kind": "progress", "expect_exit": 0,
-      "expect_codes": ["abbreviation", "absolute_wording"] }
+      "expect_codes": ["abbreviation", "absolute_wording"] },
+    { "file": "timepoint-false-positive.txt", "kind": "progress", "expect_exit": 0,
+      "expect_codes": [] }
   ]
 }

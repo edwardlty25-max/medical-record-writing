@@ -66,7 +66,7 @@ metadata:
 | 入院、再次或多次入院、24 小时内入出院或死亡记录 | [references/admission-note.md](references/admission-note.md) |
 | 首次病程记录 | [references/first-progress-note.md](references/first-progress-note.md) |
 | 日常病程、上级查房、交接班、抢救、会诊 | [references/progress-note.md](references/progress-note.md) |
-| 出院记录 | [references/discharge-summary.md](references/discharge-summary.md) |
+| 出院记录（含书写逻辑与自检清单） | [references/discharge-summary.md](references/discharge-summary.md) |
 | 转科、死亡记录或死亡讨论 | [references/transfer-and-death.md](references/transfer-and-death.md) |
 | 格式、时限、签名、修改与质控；规范来源与核验状态 | [references/rules.md](references/rules.md) |
 | 现病史与诊断思路的协和式组织 | [references/pumch-style.md](references/pumch-style.md) |

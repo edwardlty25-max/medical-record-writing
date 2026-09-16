@@ -93,7 +93,7 @@ DT_RE = re.compile(
     r"(\d{4})\s*[-/年]\s*(\d{1,2})\s*[-/月]\s*(\d{1,2})\s*日?(?:\s+|T)(\d{1,2})\s*[:：]\s*(\d{2})")
 CLOCK_RE = re.compile(r"(?<![\d:])(\d{1,2})\s*[:：]\s*(\d{2})(?![\d:])")
 TIME12_RE = re.compile(r"(上午|下午|晚上|凌晨|中午)\s*\d{1,2}")
-HOUR_RE = re.compile(r"(?<![\d.])(\d{1,2})\s*[点时]")
+HOUR_RE = re.compile(r"(?<![\d.（(])(\d{1,2})\s*[点时]")
 TEMP_RE = re.compile(r"(?:体温|(?<![A-Za-z0-9])T)\s*[:：]?\s*\d{2}(?:\.\d)?")
 BP_RE = re.compile(r"(?:血压|(?<![A-Za-z])BP)\s*[:：]?\s*\d{2,3}\s*/\s*\d{2,3}")
 

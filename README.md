@@ -28,7 +28,7 @@ python scripts/validate_note.py 正文.txt --kind progress --admit "2026-09-16 0
 | 入院记录（四类） | references/admission-note.md |
 | 首次病程记录 | references/first-progress-note.md |
 | 日常病程记录、上级查房、交接班、抢救、会诊 | references/progress-note.md |
-| 出院记录 | references/discharge-summary.md |
+| 出院记录（含书写逻辑与自检清单） | references/discharge-summary.md |
 | 转科记录、死亡记录、死亡讨论 | references/transfer-and-death.md |
 | 书写规范（2013 年版规范 + 协和逻辑） | references/rules.md |
 | 协和病历书写逻辑专题 | references/pumch-style.md |
