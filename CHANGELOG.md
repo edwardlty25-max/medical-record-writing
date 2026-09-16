@@ -4,6 +4,17 @@
 
 ## [Unreleased]
 
+## [1.8.0] - 2026-09-16
+
+### Added
+- 各文书模板统一为**「书写要点 + 模板 + 常见缺陷 + 自检」**四段式：admission-note.md、first-progress-note.md、progress-note.md、transfer-and-death.md、discharge-summary.md。
+- `discharge-summary.md` 新增**「易漏要素」**清单（过敏史、输血及输血反应、上级医师意见、特殊情况、关键阴性结果、未解决问题出口），思考骨架同步补 `【上级医师意见】【输血与不良反应】【特殊情况】`。
+- `validate_note.py` 新增 `allergy_history_missing`、`transfusion_reaction_unstated`（WARN）。
+
+### Changed
+- `pumch-style.md` 的「三、各文书书写逻辑」改为**路由索引**，逐文书逻辑下沉到各自模板文件，消除两处维护同一套逻辑的漂移风险。
+
+
 ## [1.7.0] - 2026-09-16
 
 ### Added

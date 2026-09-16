@@ -94,6 +94,12 @@ SKELETON_LABELS = ("【诊断依据】", "【住院检查】", "【诊断演变�
 CLOSURE_WORDS = ("复查", "复诊", "随诊", "随访")
 UNSOLVED_MARKERS = ("拒绝", "待查", "未明确", "未完善")
 CONSULT_TONE = ("贵科", "我科")
+
+# ---- 易漏要素（对应各模板的“易漏要素”清单） ----
+ALLERGY_KINDS = ("admission", "admission-readmission", "first-progress", "discharge")
+BLOOD_PRODUCT_RE = re.compile(
+    r"(?:输注|输)\s*(?:[ABO]{1,2}型)?\s*(?:悬浮红细胞|红细胞|血浆|血小板|全血|冷沉淀|白蛋白)")
+BLOOD_REACTION_RE = re.compile(r"输血反应|输注反应|不良反应|无反应|未见反应")
 PLACEHOLDER_RE = re.compile(r"_{2,}|＿{2,}")
 TEMPLATE_HINT_RE = re.compile(
     r"（[^）]{0,40}(?:≤\s*\d+\s*字|不超过\s*\d+\s*字|如[:：]|选填|择一|可不填|括号内说明)[^）]{0,20}）")
@@ -298,6 +304,15 @@ def check_discharge(text: str, kind) -> None:
             add(WARN, "consult_note_copied", line_no(text, pos),
                 f"疑似照录会诊原文（「{word}」）；应转写为本院叙述：会诊科室 + 意见 + 本科采纳情况")
 
+def check_required_elements(text: str, kind) -> None:
+    """易漏要素：过敏史、输血反应。"""
+    if kind in ALLERGY_KINDS and "过敏" not in text:
+        add(WARN, "allergy_history_missing", 1,
+            "未见过敏史记录；既往史/入院情况须明确药物与食物过敏史（无则写“无”）")
+    if BLOOD_PRODUCT_RE.search(text) and not BLOOD_REACTION_RE.search(text):
+        add(WARN, "transfusion_reaction_unstated", 1,
+            "记录了输血/输注血制品，但未见有无输血反应的描述")
+
 def parse_first_dt(text: str):
     m = DT_RE.search(text)
     if not m:
@@ -370,6 +385,7 @@ def main(argv=None) -> int:
     check_signature(text, need_sig)
     check_vitals(text, need_vitals)
     check_discharge(text, args.kind)
+    check_required_elements(text, args.kind)
     check_deadline(text, args.kind, args.admit, args.record)
 
     FINDINGS.sort(key=lambda f: (_ORDER.get(f["level"], 9), f["line"]))
