@@ -1,7 +1,7 @@
 ---
 name: medical-record-writing
 description: 面向中国执业医师的内科病历书写加速器。当医生说“写病历”“写入院记录”“写首程”“写病程”“写查房记录”“写交班”“写出院小结”“写转科记录”“整理成病历”“这块病历帮我顺一下”“按河北规范写”，或粘贴口述、草稿、化验与检查结果要求成文时使用。默认输出可直接粘贴进 HIS 的病历正文，并自动执行规范硬红线自检（主诉≤20字、单项否决时限、计量单位、药品通用名、签名与未填占位）。病情分析、诊断依据、鉴别诊断与治疗方案属于可选旁路，仅在医生明确要求时启用。不用于患者自我诊疗。
-version: 1.14.2
+version: 1.15.0
 author: edwardlty25-max
 license: MIT
 metadata:
@@ -106,5 +106,5 @@ metadata:
 - 写作：[references/rules.md](references/rules.md)、[references/pumch-style.md](references/pumch-style.md)、[references/progress-note.md](references/progress-note.md) 等模板文件
 - 输入与示例：[assets/intake-form.md](assets/intake-form.md)、[references/examples/daily-progress-example.md](references/examples/daily-progress-example.md)
 - 分析：[references/case-analysis.md](references/case-analysis.md)、[references/clinical-diagnosis.md](references/clinical-diagnosis.md)、[references/clinical-reasoning-treatment.md](references/clinical-reasoning-treatment.md)
-- 指南：[references/guidelines/](references/guidelines/README.md)（10 个亚专业，核验日期见其 README）
-- 工程校验：`scripts/validate_note.py`（正文自检）、`scripts/check_links.py`、`scripts/run_tests.py`；示例见 `references/examples/`
+- 指南：[references/guidelines/](references/guidelines/README.md)（10 个亚专业）
+- 自检脚本：`scripts/validate_note.py`；示例见 `references/examples/`

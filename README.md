@@ -95,11 +95,9 @@ git clone https://github.com/edwardlty25-max/medical-record-writing.git "$env:US
 - **安全边界**：可选旁路的分析为临床决策支持，不替代主治医师判断；不虚构数据；危重征象优先警示；具体药物剂量、疗程和高风险方案须经指南/说明书核验；不面向患者使用。
 - **自检边界**：`scripts/validate_note.py` 只检查格式与规范中可机检的部分（主诉字数、时限、计量单位、商品名、签名、占位符等），**不判断医学内容正确性**，也不替代医院质控与医师本人签名。
 - **规范来源**：基准为《河北省病历书写规范（2013年版）》（冀卫办医政〔2013〕30号）；标注「2023 补充」的条目未核实到统一文号，须与本院现行版本核对。详见 references/rules.md 的「来源与核验状态」。
-- **仓库级自检**：`python scripts/check_links.py && python scripts/run_tests.py`，CI 见 `.github/workflows/validate.yml`。
 
 ## 开发说明
 
-- 结构：`.claude-plugin/plugin.json` 与 `marketplace.json` 为 Claude 插件清单；`SKILL.md` 为主指令（快路径 + 输出契约 + 硬红线）；`assets/intake-form.md` 为输入字段清单；`references/` 为模板、规范（含「来源与核验状态」）、安全边界、示例与指南；`scripts/` 为确定性自检与工程校验；`tests/` 为回归用例；`.github/workflows/validate.yml` 为 CI。Codex 侧无需 `.claude-plugin/`，直接以目录形式加载 `SKILL.md`（另见 `AGENTS.md`）。
-- 协作：贡献前请读 `CONTRIBUTING.md`；变更记录见 `CHANGELOG.md`；规范纠错请用 issue 模板。
-- 版本：v1.14.2 · 作者 edwardlty25-max（MIT License）
+- 结构：`.claude-plugin/` 为 Claude 插件清单；`SKILL.md` 为主指令（快路径 + 输出契约 + 硬红线）；`assets/` 为输入字段清单与快用卡；`references/` 为模板、规范（含「来源与核验状态」）、安全边界、示例与指南；`scripts/validate_note.py` 为确定性自检。Codex 等按目录加载 `SKILL.md` 即可，无需插件清单。
+- 版本：v1.15.0 · 作者 edwardlty25-max（MIT License）
 - 卸载：删除本地安装目录即卸载（Marketplace 安装者使用 claude plugin 对应命令）。
