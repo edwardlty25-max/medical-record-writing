@@ -4,6 +4,15 @@
 
 ## [Unreleased]
 
+## [1.12.0] - 2026-09-16
+
+### Added
+- `references/examples/demo-case-01-*.md`：**试验病例全套**——入院记录 + 首次病程（一程）+ 日常病程（二程、三程）+ 出院记录，同一患者、时间链与治疗线连贯；5 份均经 `validate_note.py` 校验为 **0 ERROR / 0 WARN**，并自动纳入 `run_tests.py` 回归基线。
+
+### Removed
+- `README.md` 删除 WorkBuddy 适配说明章节（不再宣称适配该平台）。
+
+
 ## [1.11.0] - 2026-09-16
 
 ### Added
