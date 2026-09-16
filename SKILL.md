@@ -1,84 +1,104 @@
 ---
 name: medical-record-writing
-description: This skill should be used when a clinician asks to write, organize, revise, or audit Chinese internal-medicine records such as admission notes, progress notes, rounds, handoffs, consultations, rescue records, discharge summaries, transfer records, or death records; or asks to analyze a clinical case, interpret laboratory or imaging reports, provide a working diagnosis with documented supporting evidence, develop a differential diagnosis, or discuss a guideline-based management plan. 常见触发语包括“写病历”“写入院记录”“写病程”“写出院记录”“按河北规范”“按协和逻辑”“分析这个患者”“解读化验单”“诊断依据”“诊断鉴别”“治疗方案”。
-version: 1.3.1
+description: 面向中国执业医师的内科病历书写加速器。当医生说“写病历”“写入院记录”“写首程”“写病程”“写查房记录”“写交班”“写出院小结”“写转科记录”“整理成病历”“这块病历帮我顺一下”“按河北规范写”，或粘贴口述、草稿、化验与检查结果要求成文时使用。默认输出可直接粘贴进 HIS 的病历正文，并自动执行规范硬红线自检（主诉≤20字、单项否决时限、计量单位、药品通用名、签名与未填占位）。病情分析、诊断依据、鉴别诊断与治疗方案属于可选旁路，仅在医生明确要求时启用。不用于患者自我诊疗。
+version: 1.4.0
 author: edwardlty25-max
-tags: [病历, 医疗记录, 内科, guidelines, clinical-note]
+license: MIT
+metadata:
+  tags: [病历, 医疗记录, 内科, clinical-note]
+  scope: 中国内科住院病历；以河北规范为基础，医院现行制度优先
 ---
 
-# 内科病历书写、诊断支持与指南路由
+# 内科病历书写加速器
 
-面向执业医师的轻量双模式工具：
+**主旨**：把医生给的零散事实（口述、草稿、粘贴的化验与检查结果）在**一次交互内**转成**可直接粘贴进 HIS 的规范病历正文**，并在出稿前跑一遍**确定性规范自检**。
 
-- **模式 A｜病历书写**：将医生提供的事实整理为符合医院现行制度、河北病历规范及协和病历逻辑的中文病历。
-- **模式 B｜诊断支持**：提取临床信息，识别危重信号，提供分级诊断、事实依据、鉴别诊断和按需核验的指南依据。
+本技能不代替医师诊断、处方、签名或医院审核；医院现行制度与有效法规优先于本捆绑摘要。
 
-本技能不代替医师诊断、处方、签名或医院审核，也不面向患者自我诊疗。医院现行制度与有效法规优先于捆绑摘要。
+## 一、用与不用
 
-## 运行路径
+- **用**：入院记录、首次病程、日常病程、上级查房、交接班、抢救、会诊、出院记录、转科与死亡记录，以及“整理成病历”“按河北规范写”“按协和逻辑写”。
+- **可选旁路（需医生明确要求）**：诊断依据、鉴别诊断、治疗方案、解读化验单、分析病例。
+- **不用**：疑似患者或家属 → 只给一般健康信息、就医分流与危险信号，不生成个体化诊疗方案；非内科或非中国规范 → 先说明覆盖范围。
+- **急危重优先**：危急值、休克、呼吸衰竭、意识改变、活动性出血等，先提示立即临床评估，再谈成文。
 
-优先选择满足任务的最小路径，避免手机端加载无关模板或全量指南。
+## 二、快路径（默认，3 步）
 
-| 路径 | 触发 | 最小读取范围 | 输出 |
-|---|---|---|---|
-| 快速文书 | 仅要求首程、日常病程、出院等文书 | 对应模板 + `rules.md` | 可复制草稿 +【待补充确认】 |
-| 诊断支持 | 诊断、诊断依据、鉴别诊断或病历中的诊断思路 | `case-analysis.md` + `clinical-diagnosis.md` + 对应专科指南 | 分级诊断、事实依据、鉴别与下一步建议 |
-| 高风险决策 | 具体剂量、疗程、禁忌、相互作用或急危重处置 | 上述资源 + 指南原文/说明书核验 | 已核验建议；无法核验则降级 |
+1. **定文书**：医生未说明时按输入内容判定，并在回复首行写出文书类型（不进正文）。
+2. **取事实**：只用医生已给内容。缺字段时按 [assets/intake-form.md](assets/intake-form.md) 追问——**最多 1 轮、最多 3 个问题**；也可不追问直接成稿，缺项标【待补充】。
+3. **出稿并自检**：按模板生成 → 运行 `scripts/validate_note.py` → 在正文之外附一行自检结论（如“自检：通过 / 2 项需确认”）。
 
-## 通用规则
+## 三、输入契约
 
-1. **急危重优先**：危急值、休克、呼吸衰竭、意识改变或活动性出血等情况先提示立即临床评估，不让生成或检索延误处置。
-2. **只使用已提供事实**：不猜测模糊图片，不补造病史、查体、诊断、医嘱、签名或时间；缺失、冲突和低置信度信息进入【待补充确认】。
-3. **最小化隐私**：非必要时省略直接标识符。
-4. **事实、判断与建议分离**：不把模型分析、指南建议或拟诊写成已发生的医疗行为。
-5. **诊断分级**：医生已确认的诊断可按文书规范写入正文；模型输出只能标为“现有资料支持”“拟诊/待排除”或“资料不足”，并逐项列出依据。
-6. **审慎表达**：除非医生已确认，避免“一定、完全排除、明确无误”等绝对表述；使用“目前考虑、现有资料支持、暂不支持、仍需结合”。
-7. **高风险核验**：具体阈值、剂量、疗程、禁忌、相互作用或急危重决策必须核对权威指南/说明书；无法核验时标明不确定性并只给原则性建议。
-8. **治疗计划可追溯**：写明治疗目标、问题对应关系、治疗类别/药物、监测与调整条件；未提供或未核验的具体剂量、疗程和适用条件标注【待医生确认】。
+- [assets/intake-form.md](assets/intake-form.md) 是最小字段清单，供医生粘贴口述或填空；**医生整段口述即可，无需按格式填写**。
+- 图片/化验单：保留原始数值、单位、参考范围与采样时间；模糊、遮挡、缺单位 → 列入【待补充确认】，不猜。
+- 材料冲突时并列呈现并请医生确认，不自行取舍。
 
-## 模式 A｜病历书写
+## 四、输出契约（守住“可直接粘贴”）
 
-### 资源路由
+1. **默认只输出一个正文代码块**，可直接粘贴进 HIS；不夹带提示语、质控说明、免责声明、模型推理或就医建议。
+2. 模板括号内的提示（如“（症状+部位+持续时间，≤20字）”）**不得进入输出**；输出前逐行检查并删除所有占位符与说明性括号。
+3. 辅助信息块**仅在医生索取时**输出：【诊断依据】【待补充确认】【指南依据】。
+4. **事实可回溯**：正文中每个数值、体征、诊断、医嘱都必须来自输入或医生确认；无法回溯的写【待补充】。
+5. 格式：日期用“年-月-日”，时间用 24 小时制并精确到分；单位用 mmHg、℃、次/分、g/L、mmol/L 等法定符号；药物用通用名；缩写首次出现写全称（括号注缩写）。
+
+## 五、规范硬红线（出稿前必查）
+
+优先运行 `scripts/validate_note.py`（确定性机检）；无 Python 环境时按本表与 [references/rules.md](references/rules.md) 第十二节逐条自查。
+
+| # | 红线 | 后果 |
+|---|---|---|
+| 1 | 单项否决时限：首程 ≤8h、入院记录 ≤24h、危重上级查房 ≤24h、主治首次查房 ≤48h、主任/副高首次查房 ≤72h、抢救补记 ≤6h、出院/死亡 ≤24h | 整份病历不合格 |
+| 2 | 主诉 ≤20 字、不用诊断或检查结果、与现病史时间一致 | 常见扣分 |
+| 3 | 计量单位禁用“公分/公尺/公升/立升”；“公斤”建议改写 kg | 常见扣分 |
+| 4 | 药物用通用名，不用商品名 | 常见扣分 |
+| 5 | 签名用全名；电子病历打印后须补手写签名 | 法律风险 |
+| 6 | 修改保留原记录、每页 ≤3 处、每处 ≤20 字；禁刮粘涂描 | 法律风险 |
+| 7 | 阴性体征不得写“无异常”“(-)”，须逐系统具体化 | 常见扣分 |
+| 8 | 诊断分初步/修正/补充/出院，按主次排序并写在规定位置（末页中线右侧/左侧） | 常见扣分 |
+| 9 | 院外检查写明机构名称、检查号、检查日期 | 常见扣分 |
+| 10 | 知情同意书须签署意见（如“同意手术”），不能只签名 | 法律风险 |
+
+## 六、文书路由（按需读取，不预加载）
 
 | 文书或任务 | 必读资源 |
 |---|---|
-| 入院、再次/多次入院、24 小时内入出院或死亡记录 | [references/admission-note.md](references/admission-note.md) |
+| 入院、再次或多次入院、24 小时内入出院或死亡记录 | [references/admission-note.md](references/admission-note.md) |
 | 首次病程记录 | [references/first-progress-note.md](references/first-progress-note.md) |
 | 日常病程、上级查房、交接班、抢救、会诊 | [references/progress-note.md](references/progress-note.md) |
 | 出院记录 | [references/discharge-summary.md](references/discharge-summary.md) |
 | 转科、死亡记录或死亡讨论 | [references/transfer-and-death.md](references/transfer-and-death.md) |
 | 格式、时限、签名、修改与质控 | [references/rules.md](references/rules.md) |
 | 现病史与诊断思路的协和式组织 | [references/pumch-style.md](references/pumch-style.md) |
-| 诊断依据、诊断倾向或鉴别诊断 | [references/clinical-diagnosis.md](references/clinical-diagnosis.md) |
-| 需要展开治疗方向、补充诊断或诊疗决策逻辑 | [references/clinical-reasoning-treatment.md](references/clinical-reasoning-treatment.md) |
+| 输入字段清单 | [assets/intake-form.md](assets/intake-form.md) |
+| 成稿样式示例（虚构数据） | [references/examples/daily-progress-example.md](references/examples/daily-progress-example.md) |
 
-### 工作流
+**最常用的一种写法（日常病程）**：客观输入（一般情况 / 查体 / 检查 / 会诊）原样整合 → 由本技能补足“分析判断 + 诊疗计划 + 医患沟通” → 成一段通顺文字。重病或病情变化当日必记，不得只写“病情平稳、继续原治疗”。
 
-1. 确认文书类型、事件时间、记录者身份和医生提供的原始材料。
-2. 快速文书只读取对应模板与 `rules.md`；用户要求诊断思路、补充诊断、治疗方向或优秀病历式分析时再读取 `clinical-diagnosis.md`、`clinical-reasoning-treatment.md` 与对应指南。
-3. 按模板字段顺序生成。未提供内容标记【待补充】，口语可规范化但不得改变医学事实。
-4. 自查主诉与现病史一致性、时间、计量单位、药物通用名、诊断排序、签名与医院要求。
-5. 输出正文后按需附辅助信息块：
-   - **【诊断依据】**：支持/不支持事实、关键缺口和下一步区分检查；
-   - **【待补充确认】**：缺失、冲突或需医生核实的内容；
-   - **【指南依据】**：仅在使用指南时列出名称、年份、来源状态和核验日期。
+## 七、可选旁路：病情分析与治疗（默认关闭）
 
-不要把质控说明、未确认的模型诊断、模型推理或免责声明混入拟粘贴至 HIS 的正文。仅将医生确认的诊断及其可核实依据写入正文；提醒医生完成真实时间、全名签名及必要审核。
+仅当医生明确要求“诊断依据 / 鉴别诊断 / 治疗方案 / 分析这个患者 / 解读化验单”时才读取：
 
-## 模式 B｜诊断支持
+1. [references/case-analysis.md](references/case-analysis.md) 与 [references/clinical-diagnosis.md](references/clinical-diagnosis.md)：分级诊断（医生已确认 / 现有资料支持 / 拟诊或待排除 / 资料不足）与事实依据。
+2. 需要治疗方向时读 [references/clinical-reasoning-treatment.md](references/clinical-reasoning-treatment.md)。
+3. 需要诊断标准或治疗原则时，按 [references/guidelines/README.md](references/guidelines/README.md) 路由到**当前主问题所属专科**文件；**不加载整库**。
 
-完整流程读取 [references/case-analysis.md](references/case-analysis.md) 与 [references/clinical-diagnosis.md](references/clinical-diagnosis.md)。涉及诊断标准、检查路径或治疗原则时，按 [references/guidelines/README.md](references/guidelines/README.md) 路由到相应亚专业文件。
+**旁路输出不得进入病历正文**：模型分析、未确认诊断、指南建议、免责声明一律放在正文之外的辅助块。具体剂量、疗程、阈值、禁忌、相互作用或急危重决策必须核对权威原文或说明书；无法核验时只给原则性建议并标“版本待核实”。
 
-1. 提取年龄/性别、主诉与病程、生命体征、关键查体、检查结果、既往史、过敏史、肝肾功能和当前用药，保留原始数值、单位、时间与来源。
-2. 识别急危重信号，再概括主要临床问题和受累系统。
-3. 按“医生已确认 / 现有资料支持 / 拟诊或待排除 / 资料不足”分级输出诊断；每项列支持事实、不支持事实、关键缺口和区分检查。
-4. 需要诊疗计划时，读取 `clinical-reasoning-treatment.md`；需要指南时，只读取当前主问题所属专科摘要。治疗建议先核对适应证、禁忌、过敏、器官功能、相互作用和来源状态。
-5. 默认输出：危重提示（如有）→ 临床问题摘要 → 分级诊断与依据 → 鉴别诊断 → 下一步检查/处理原则 →【待补充确认】→【指南依据】。只有用户明确要求某类病历时，才套用文书模板。
+## 八、安全边界
 
-## 安全边界
+1. **只使用已提供事实**：不补造病史、查体、诊断、医嘱、签名或时间；缺失、冲突、低置信度信息一律进【待补充确认】。
+2. **诊断分级**：医生已确认的诊断可写入正文；模型输出只能标“现有资料支持”“拟诊/待排除”“资料不足”，并逐项列出依据。
+3. **事实、判断与建议分离**：不把模型分析、指南建议或拟诊写成已发生的医疗行为。
+4. **审慎表达**：除非医生已确认，避免“一定、完全排除、明确无误”等绝对表述。
+5. **隐私**：输入前去除姓名、住院号、身份证号、联系方式等直接标识符；不要把未脱敏病历上传到云端模型。
+6. **高风险药物**（抗凝、溶栓、胰岛素、化疗、强心/血管活性药、镇静麻醉药、抗感染药等）优先核对权威原文、药品说明书及本院路径。
+7. **面向医务人员**：疑似患者或家属只提供一般性健康信息、就医分流和危险信号。
 
-- 若用户疑似患者或家属，提供一般性健康信息、就医分流和危险信号，不生成供其自行实施的处方或个体化用药方案。
-- 不把本地摘要称为“最新”而未核验；注明指南名称、年份、来源状态和核验日期。
-- 对抗凝、溶栓、胰岛素、化疗、强心/血管活性药、镇静麻醉药、抗感染药等高风险方案，优先核对权威原文、药品说明书及本院路径。
-- 图片无法辨认、缺少参考范围或来源不明时，明确写“待核实”。
-- 发现材料前后矛盾时并列呈现冲突，不自行合理化。
+## 九、参考文件索引
+
+- 写作：[references/rules.md](references/rules.md)、[references/pumch-style.md](references/pumch-style.md)、[references/progress-note.md](references/progress-note.md) 等模板文件
+- 输入与示例：[assets/intake-form.md](assets/intake-form.md)、[references/examples/daily-progress-example.md](references/examples/daily-progress-example.md)
+- 分析：[references/case-analysis.md](references/case-analysis.md)、[references/clinical-diagnosis.md](references/clinical-diagnosis.md)、[references/clinical-reasoning-treatment.md](references/clinical-reasoning-treatment.md)
+- 指南：[references/guidelines/](references/guidelines/README.md)（10 个亚专业，核验日期见其 README）
+- 工具：`scripts/validate_note.py`

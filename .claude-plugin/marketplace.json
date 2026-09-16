@@ -4,19 +4,19 @@
     "name": "edwardlty25-max",
     "url": "https://github.com/edwardlty25-max"
   },
-  "description": "面向执业医师的内科病历书写与病情分析 Claude Code 插件",
+  "description": "面向执业医师的内科病历书写加速器 Claude Code 插件",
   "plugins": [
     {
       "name": "medical-record-writing",
       "source": "./",
-      "description": "轻量双模式内科病历助手，包含快速病程、诊断层级、治疗计划、鉴别诊断与按需指南核验",
+      "description": "一次成稿、可直接粘贴进 HIS 的内科病历书写加速器，内置规范硬红线自检；附可选的诊断与治疗分析旁路",
       "category": "healthcare",
       "keywords": [
         "病历",
         "医疗记录",
         "内科",
-        "guidelines",
-        "clinical-note"
+        "clinical-note",
+        "guidelines"
       ]
     }
   ]
