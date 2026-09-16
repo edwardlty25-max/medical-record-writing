@@ -1,4 +1,5 @@
 # 入院记录模板（2013 年版规范 + 协和逻辑）
+> **版本 v1.9.0（2026-09-16）**｜依据：《河北省病历书写规范（2013年版）》（冀卫办医政〔2013〕30号），**本院现行制度优先**；标注「2023 补充/修订」的条目来源待核验（见 [rules.md](rules.md) 的「来源与核验状态」）。
 
 书写时限：**入院后 24 小时内**（单项否决）。四类：入院记录 / 再次或多次入院记录 / 24 小时内入出院记录 / 24 小时内入院死亡记录。
 
@@ -87,3 +88,22 @@ ____（入院前与本次疾病相关的检查，按检查日期顺序分类记�
 - 人工：主诉与现病史时间一致；过敏史/输血史齐备；院外检查三要素；诊断位置与排序；签名资质。
 
 相关：[rules.md](rules.md)（时限与格式）、[pumch-style.md](pumch-style.md)（内涵质量）。
+
+## 输出字段清单（供结构化 / 对接 HIS）
+
+```yaml
+kind: admission            # admission | admission-readmission | in-out-24h | in-death-24h
+admission_time: ""         # YYYY-MM-DD HH:MM
+record_time: ""
+patient: {name: "", sex: "", age: "", ethnicity: "", marriage: "", birthplace: "", occupation: ""}
+history_source: {name: "", relation: "", reliability: ""}
+chief_complaint: ""        # ≤20 字，症状+部位+时间
+present_illness: ""
+past_history: {diseases: "", surgery: "", transfusion: "", allergy: "", infection: "", vaccination: ""}
+personal_history: ""; marital_history: ""; family_history: ""
+vitals: {T: "", P: "", R: "", BP: "", weight: ""}
+exam: {skin: "", nodes: "", head_neck: "", chest: "", abdomen: "", spine_limbs: "", nervous: "", specialty: ""}
+aux_exams: [{date: "", item: "", result: "", unit: "", ref: "", institution: "", report_no: ""}]
+preliminary_diagnosis: []
+signature: {physician: "", date: ""}
+```

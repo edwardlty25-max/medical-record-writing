@@ -69,7 +69,7 @@ metadata:
 | 出院记录（含书写逻辑与自检清单） | [references/discharge-summary.md](references/discharge-summary.md) |
 | 转科、死亡记录或死亡讨论 | [references/transfer-and-death.md](references/transfer-and-death.md) |
 | 格式、时限、签名、修改与质控；规范来源与核验状态 | [references/rules.md](references/rules.md) |
-| 现病史与诊断思路的协和式组织 | [references/pumch-style.md](references/pumch-style.md) |
+| 优秀病历标准与内涵质量（逐文书逻辑见对应模板） | [references/pumch-style.md](references/pumch-style.md) |
 | 输入字段清单 | [assets/intake-form.md](assets/intake-form.md) |
 | 成稿样式示例（虚构数据） | [references/examples/daily-progress-example.md](references/examples/daily-progress-example.md) |
 

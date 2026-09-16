@@ -1,4 +1,5 @@
 # 出院记录：书写逻辑、模板与自检
+> **版本 v1.9.0（2026-09-16）**｜依据：《河北省病历书写规范（2013年版）》（冀卫办医政〔2013〕30号），**本院现行制度优先**；标注「2023 补充/修订」的条目来源待核验（见 [rules.md](rules.md) 的「来源与核验状态」）。
 
 书写时限：**出院后 24 小时内**完成。**出院诊断由主治医师及以上资质作出**，书写于**末页左侧**；一式两份，一份归档，一份交患者保存。自动出院（签字离院）须写明“患者/家属要求出院并签字”。
 
@@ -159,3 +160,28 @@
 - [ ] 签名全名与日期齐全；电子病历打印后补手写签名
 
 相关：[rules.md](rules.md)（时限与格式）、[pumch-style.md](pumch-style.md)（内涵质量）、[examples/discharge-example.md](examples/discharge-example.md)（成文形态示例，虚构数据）。
+
+## 输出字段清单（供结构化 / 对接 HIS）
+
+```yaml
+kind: discharge
+discharge_time: ""; admission_date: ""; discharge_date: ""
+patient: {name: "", sex: "", age: "", inpatient_no: ""}
+admission_status: {chief_complaint: "", present_illness: "", past_history: "", allergy: "", exam: "", aux_exams: []}
+admission_diagnosis: []
+course:
+  diagnostic_basis: ""; senior_opinion: ""
+  inpatient_exams: [{date: "", item: "", result: "", unit: "", ref: ""}]
+  diagnosis_evolution: [{type: "supplement|correction", name: "", basis: "", found_at: "", impact: ""}]
+  problems: [{problem: "", basis: "", treatment: "", response: "", monitoring: "", refusal: ""}]
+  transfusion: {product: "", amount: "", time: "", reaction: "", consent: ""}
+  special_events: ""        # 抢救/ICU/转科/非医嘱出院/转院/死亡衔接；无则“无”
+  consultations: [{department: "", opinion: "", adopted: ""}]
+  summary: ""; pre_discharge_review: ""; outcome: ""
+discharge_diagnosis: []
+discharge_status: {symptoms: "", vitals: {}, exam: "", function: "", diet_sleep: ""}
+discharge_orders:
+  medications: [{group: "", generic: "", dose: "", frequency: "", route: "", course: "", stop_when: "", monitor: ""}]
+  follow_up: ""; lifestyle: ""; precautions: ""
+signature: {physician: "", date: ""}
+```

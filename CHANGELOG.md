@@ -4,6 +4,19 @@
 
 ## [Unreleased]
 
+（下次变更写在这里；发布时改为 `## [x.y.z] - YYYY-MM-DD` 并同步 `plugin.json` 版本号。）
+
+## [1.9.0] - 2026-09-16
+
+### Added
+- 5 个文书模板新增**输出字段清单**（YAML，供结构化与对接 HIS）。
+- 各模板顶部新增**版本与依据标注**，与 `rules.md` 的「来源与核验状态」对齐。
+- `.gitattributes`：仓库内文本统一 LF，消除 Windows 端 CRLF 告警与噪音 diff。
+
+### Changed
+- `SKILL.md` 路由表中 `pumch-style.md` 的描述修正为「优秀病历标准与内涵质量（逐文书逻辑见对应模板）」。
+
+
 ## [1.8.0] - 2026-09-16
 
 ### Added

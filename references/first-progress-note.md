@@ -1,4 +1,5 @@
 # 首次病程记录模板（2013 年版规范 + 协和逻辑）
+> **版本 v1.9.0（2026-09-16）**｜依据：《河北省病历书写规范（2013年版）》（冀卫办医政〔2013〕30号），**本院现行制度优先**；标注「2023 补充/修订」的条目来源待核验（见 [rules.md](rules.md) 的「来源与核验状态」）。
 
 书写时限：**入院后 8 小时内**（单项否决）。书写资质：**仅限本院注册执业医师**，实习、试用期、进修人员不能书写。
 
@@ -72,3 +73,19 @@
 - 人工：五部分齐全；诊断依据可回溯；鉴别诊断有区分检查；诊疗计划可执行；签名资质。
 
 相关：[rules.md](rules.md)（时限与格式）、[pumch-style.md](pumch-style.md)（内涵质量）。
+
+## 输出字段清单（供结构化 / 对接 HIS）
+
+```yaml
+kind: first-progress
+record_time: ""
+case_features: {general: "", onset_symptoms: "", past_history: "", exam: "", positive_aux: ""}
+preliminary_diagnosis: []
+diagnostic_basis: []
+differential: [{disease: "", support: "", against: "", distinguishing_test: ""}]
+plan:
+  problem_goal: ""; exams: ""
+  treatment: [{generic: "", dose: "", route: "", frequency: "", start: "", course: ""}]
+  supportive: ""; monitoring: ""; communication: ""
+signature: ""
+```

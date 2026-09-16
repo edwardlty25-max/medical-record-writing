@@ -1,4 +1,5 @@
 # 病程记录模板（2013 年版频率 + 协和结构）
+> **版本 v1.9.0（2026-09-16）**｜依据：《河北省病历书写规范（2013年版）》（冀卫办医政〔2013〕30号），**本院现行制度优先**；标注「2023 补充/修订」的条目来源待核验（见 [rules.md](rules.md) 的「来源与核验状态」）。
 
 ## 书写要点
 
@@ -134,3 +135,19 @@ ____（会诊医师对病情的分析、诊断意见、处理建议）
 - 人工：客观/智能两部分是否齐全；频率是否达标；分析结论是否有据；沟通记录是否落实。
 
 相关：[rules.md](rules.md)（时限与格式）、[pumch-style.md](pumch-style.md)（内涵质量）。
+
+## 输出字段清单（供结构化 / 对接 HIS）
+
+```yaml
+kind: progress   # progress | rounds-critical | rounds-attending | rounds-director | handover | rescue | consultation
+record_time: ""
+general_condition: ""
+treatment: [{generic: "", dose: "", route: "", frequency: "", change_reason: ""}]
+exam: ""
+aux_exams: [{date: "", item: "", result: "", unit: "", ref: ""}]
+consultations: []
+assessment: ""    # 分析判断：好转/加重/平稳、诊断是否调整、治疗反应
+plan: ""          # 下一步检查与治疗：目标、监测指标、调整/升级条件
+communication: ""
+signature: ""
+```

@@ -1,4 +1,5 @@
 # 转科记录 与 死亡相关记录（2013 年版规范）
+> **版本 v1.9.0（2026-09-16）**｜依据：《河北省病历书写规范（2013年版）》（冀卫办医政〔2013〕30号），**本院现行制度优先**；标注「2023 补充/修订」的条目来源待核验（见 [rules.md](rules.md) 的「来源与核验状态」）。
 
 ## 一、转科记录
 
@@ -74,3 +75,19 @@
 - 人工：转科原因具体；死亡原因与诊断分列；时间一致；讨论内容齐全。
 
 相关：[rules.md](rules.md)、[pumch-style.md](pumch-style.md)。
+
+## 输出字段清单（供结构化 / 对接 HIS）
+
+```yaml
+kind: transfer | death | death-discussion
+patient: {name: "", sex: "", age: "", inpatient_no: ""}
+admission_date: ""
+event_date: ""
+course_summary: ""
+reason: ""                  # 转科原因
+precautions: ""             # 转科后注意事项
+current_diagnosis: []
+death: {time: "", cause: "", diagnosis: ""}     # 死亡原因与死亡诊断分列
+discussion: {time: "", place: "", host: "", participants: "", opinions: [], conclusion: "", improvements: ""}
+signature: ""
+```
