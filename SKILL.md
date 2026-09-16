@@ -50,7 +50,7 @@ metadata:
 |---|---|---|
 | 1 | 单项否决时限：首程 ≤8h、入院记录 ≤24h、危重上级查房 ≤24h、主治首次查房 ≤48h、主任/副高首次查房 ≤72h、抢救补记 ≤6h、出院/死亡 ≤24h | 整份病历不合格 |
 | 2 | 主诉 ≤20 字、不用诊断或检查结果、与现病史时间一致 | 常见扣分 |
-| 3 | 计量单位禁用“公分/公尺/公升/立升”；“公斤”建议改写 kg | 常见扣分 |
+| 3 | 计量单位一律用法定符号：禁用“公分/公尺/公升/立升/公斤”，写 cm/m/L/kg | 常见扣分 |
 | 4 | 药物用通用名，不用商品名 | 常见扣分 |
 | 5 | 签名用全名；电子病历打印后须补手写签名 | 法律风险 |
 | 6 | 修改保留原记录、每页 ≤3 处、每处 ≤20 字；禁刮粘涂描 | 法律风险 |
@@ -68,7 +68,7 @@ metadata:
 | 日常病程、上级查房、交接班、抢救、会诊 | [references/progress-note.md](references/progress-note.md) |
 | 出院记录 | [references/discharge-summary.md](references/discharge-summary.md) |
 | 转科、死亡记录或死亡讨论 | [references/transfer-and-death.md](references/transfer-and-death.md) |
-| 格式、时限、签名、修改与质控 | [references/rules.md](references/rules.md) |
+| 格式、时限、签名、修改与质控；规范来源与核验状态 | [references/rules.md](references/rules.md) |
 | 现病史与诊断思路的协和式组织 | [references/pumch-style.md](references/pumch-style.md) |
 | 输入字段清单 | [assets/intake-form.md](assets/intake-form.md) |
 | 成稿样式示例（虚构数据） | [references/examples/daily-progress-example.md](references/examples/daily-progress-example.md) |
@@ -87,6 +87,8 @@ metadata:
 
 ## 八、安全边界
 
+展开版见 [references/safety-boundaries.md](references/safety-boundaries.md)（允许/禁止对照表、底线话术、急危重信号阈值）。
+
 1. **只使用已提供事实**：不补造病史、查体、诊断、医嘱、签名或时间；缺失、冲突、低置信度信息一律进【待补充确认】。
 2. **诊断分级**：医生已确认的诊断可写入正文；模型输出只能标“现有资料支持”“拟诊/待排除”“资料不足”，并逐项列出依据。
 3. **事实、判断与建议分离**：不把模型分析、指南建议或拟诊写成已发生的医疗行为。
@@ -101,4 +103,4 @@ metadata:
 - 输入与示例：[assets/intake-form.md](assets/intake-form.md)、[references/examples/daily-progress-example.md](references/examples/daily-progress-example.md)
 - 分析：[references/case-analysis.md](references/case-analysis.md)、[references/clinical-diagnosis.md](references/clinical-diagnosis.md)、[references/clinical-reasoning-treatment.md](references/clinical-reasoning-treatment.md)
 - 指南：[references/guidelines/](references/guidelines/README.md)（10 个亚专业，核验日期见其 README）
-- 工具：`scripts/validate_note.py`
+- 工程校验：`scripts/validate_note.py`（正文自检）、`scripts/check_links.py`、`scripts/run_tests.py`；示例见 `references/examples/`

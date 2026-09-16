@@ -6,7 +6,7 @@
 
 **主旨**：把医生给的零散事实（口述、草稿、粘贴的化验与检查结果）在**一次交互内**转成**可直接粘贴进 HIS 的规范病历正文**，并在出稿前跑一遍**确定性规范自检**。
 
-- **默认路径 · 病历书写（加速器）**：口述、草稿笔记、检查结果 → 标准病历文书。规范基准为**《河北省病历书写规范细则（2013年版）》（冀卫办医政〔2013〕30号）**为主体、**2023 修订要点**为补充，书写逻辑参考优秀内科病历的病例链、诊断层级与决策表达。
+- **默认路径 · 病历书写（加速器）**：口述、草稿笔记、检查结果 → 标准病历文书。规范基准为**《河北省病历书写规范（2013年版）》（冀卫办医政〔2013〕30号）**；标注「2023 补充」的条目**未核实到统一文号**，须与本医院现行版本核对（见 references/rules.md 的「来源与核验状态」）。书写逻辑参考优秀内科病历的病例链、诊断层级与决策表达。
 - **可选旁路 · 病情分析与治疗方案**：仅在医生明确要求时启用；在已有**文字或图片**（化验单、检查报告照片等）基础上，提供分级诊断、事实依据、鉴别诊断，并按风险分层核验指南依据。
 
 ## 快速开始
@@ -30,7 +30,7 @@ python scripts/validate_note.py 正文.txt --kind progress --admit "2026-09-16 0
 | 日常病程记录、上级查房、交接班、抢救、会诊 | references/progress-note.md |
 | 出院记录 | references/discharge-summary.md |
 | 转科记录、死亡记录、死亡讨论 | references/transfer-and-death.md |
-| 书写规范（河北细则 + 协和逻辑） | references/rules.md |
+| 书写规范（2013 年版规范 + 协和逻辑） | references/rules.md |
 | 协和病历书写逻辑专题 | references/pumch-style.md |
 | 输入字段清单 | assets/intake-form.md |
 | 成稿示例（虚构数据） | references/examples/daily-progress-example.md |
@@ -94,9 +94,12 @@ WorkBuddy 使用与 Claude Code 相同的标准 `SKILL.md` 技能目录；本仓
 - **指南使用**：快速文书不加载指南库；诊断、鉴别或治疗请求才按主问题读取相应亚专业摘要。具体诊断阈值、剂量、疗程、禁忌、相互作用及急危重决策须先核对权威来源。核验失败时降级为原则性建议并标注“版本待核实”（见 references/guidelines/README.md）。
 - **安全边界**：可选旁路的分析为临床决策支持，不替代主治医师判断；不虚构数据；危重征象优先警示；具体药物剂量、疗程和高风险方案须经指南/说明书核验；不面向患者使用。
 - **自检边界**：`scripts/validate_note.py` 只检查格式与规范中可机检的部分（主诉字数、时限、计量单位、商品名、签名、占位符等），**不判断医学内容正确性**，也不替代医院质控与医师本人签名。
+- **规范来源**：基准为《河北省病历书写规范（2013年版）》（冀卫办医政〔2013〕30号）；标注「2023 补充」的条目未核实到统一文号，须与本院现行版本核对。详见 references/rules.md 的「来源与核验状态」。
+- **仓库级自检**：`python scripts/check_links.py && python scripts/run_tests.py`，CI 见 `.github/workflows/validate.yml`。
 
 ## 开发说明
 
-- 结构：`.claude-plugin/plugin.json` 与 `marketplace.json` 为 Claude 插件清单；`SKILL.md` 为主指令（快路径 + 输出契约 + 硬红线）；`assets/intake-form.md` 为输入字段清单；`scripts/validate_note.py` 为确定性自检脚本；`references/` 为模板、规范、示例与指南。Codex 侧无需 `.claude-plugin/`，直接以目录形式加载 `SKILL.md`。
-- 版本：v1.4.0 · 作者 edwardlty25-max（MIT License）
+- 结构：`.claude-plugin/plugin.json` 与 `marketplace.json` 为 Claude 插件清单；`SKILL.md` 为主指令（快路径 + 输出契约 + 硬红线）；`assets/intake-form.md` 为输入字段清单；`references/` 为模板、规范（含「来源与核验状态」）、安全边界、示例与指南；`scripts/` 为确定性自检与工程校验；`tests/` 为回归用例；`.github/workflows/validate.yml` 为 CI。Codex 侧无需 `.claude-plugin/`，直接以目录形式加载 `SKILL.md`（另见 `AGENTS.md`）。
+- 协作：贡献前请读 `CONTRIBUTING.md`；变更记录见 `CHANGELOG.md`；规范纠错请用 issue 模板。
+- 版本：v1.5.0 · 作者 edwardlty25-max（MIT License）
 - 卸载：删除本地安装目录即卸载（Marketplace 安装者使用 claude plugin 对应命令）。
