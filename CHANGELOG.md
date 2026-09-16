@@ -4,6 +4,17 @@
 
 ## [Unreleased]
 
+## [1.14.0] - 2026-09-16
+
+### Added
+- `references/guidelines/rheumatology.md` 补入经 **PubMed 核实**的国际指南现行版本：EULAR RA 管理推荐 **2025 更新**、EULAR SLE 推荐 **2023 更新**、EULAR 狼疮肾炎推荐 **2025 更新**、ACR SLE 治疗指南 2025、ACR 狼疮肾炎指南 2024、ASAS-EULAR axSpA 2022、EULAR SSc 治疗推荐 **2023 更新**、GRAPPA PsA 2021、EULAR 干燥综合征 2020、EULAR AAV 管理推荐 2022 更新（2024-01 发表）、EULAR APS 2019、EULAR 白塞病管理推荐 **2025 更新**、ACR/EULAR 大动脉炎分类标准 2022-12、OARSI OA 2019、ACR RA 2021。
+
+### Changed
+- `references/guidelines/README.md` 复核状态表：风湿免疫行细化为「国际 15 项已复核（PubMed）/ 中华医学会系列中文指南未核实」；血液行如实标注「未核实（仅确认 2019-12 有中文 ITP 指南的 PubMed 记录）」。
+- 记明本轮通道情况：Bing RSS 与 360 搜索返回伪结果、DuckDuckGo/百度被验证码拦截，中文指南未能取回原始页面；国际指南改用 PubMed E-utilities。
+- 版本号统一至 1.14.0。
+
+
 ## [1.13.0] - 2026-09-16
 
 ### Changed
