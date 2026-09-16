@@ -4,6 +4,16 @@
 
 ## [Unreleased]
 
+## [1.10.0] - 2026-09-16
+
+### Added
+- `references/discharge-checklist.md`（3.9 KB）：出院记录复核清单——易漏要素、12 条常见缺陷、输出字段清单。
+- `references/progress-checklist.md`（1.5 KB）：病程记录复核清单——6 条常见缺陷、输出字段清单。
+
+### Changed
+- 按「主文件只讲怎么写、复核内容独立成页」拆分：`discharge-summary.md` → 9.6 KB、`progress-note.md` → 6.3 KB，写文书时按需二次读取复核页。
+- `SKILL.md` 与 `README.md` 增加两个复核清单入口；5 个模板版本标注同步至 v1.10.0。
+
 （下次变更写在这里；发布时改为 `## [x.y.z] - YYYY-MM-DD` 并同步 `plugin.json` 版本号。）
 
 ## [1.9.0] - 2026-09-16
