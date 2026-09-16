@@ -4,6 +4,17 @@
 
 ## [Unreleased]
 
+## [1.7.0] - 2026-09-16
+
+### Added
+- `references/discharge-summary.md` 模板改为**两形态**：A 思考骨架（带【】标签，不得进入正文）+ B 成文形态（连续段落，可粘贴）；新增**取舍三原则**（趋势优先、正常同类合并、支撑诊断的写全）。
+- `scripts/validate_note.py` 新增 6 条出院记录专有规则：`discharge_sections_missing`、`skeleton_label_leak`（均 ERROR）、`orders_categories_missing`、`no_recheck_plan`、`no_unsolved_closure`、`consult_note_copied`（WARN）。
+- `tests/cases/bad-discharge.txt`：出院记录专有规则回归用例。
+
+### Changed
+- 缺陷表与自检清单标注机检覆盖情况，模板要求与规则码一一对应。
+
+
 ## [1.6.0] - 2026-09-16
 
 ### Added

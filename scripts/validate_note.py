@@ -86,6 +86,14 @@ DATE_KINDS = ("progress", "first-progress", "admission", "admission-readmission"
               "rounds-critical", "rounds-attending", "rounds-director",
               "discharge", "death", "transfer", "handover", "rescue", "consultation")
 
+# ---- 出院记录专用规则（对应 references/discharge-summary.md） ----
+DISCHARGE_SECTIONS = ("入院情况", "入院诊断", "诊疗经过", "出院诊断", "出院情况", "出院医嘱")
+ORDER_CATEGORIES = ("药物治疗", "复诊安排", "生活方式", "注意事项")
+SKELETON_LABELS = ("【诊断依据】", "【住院检查】", "【诊断演变】", "【问题导向处理】",
+                   "【会诊整合】", "【治疗小结】", "【出院前评估】", "【转归】")
+CLOSURE_WORDS = ("复查", "复诊", "随诊", "随访")
+UNSOLVED_MARKERS = ("拒绝", "待查", "未明确", "未完善")
+CONSULT_TONE = ("贵科", "我科")
 PLACEHOLDER_RE = re.compile(r"_{2,}|＿{2,}")
 TEMPLATE_HINT_RE = re.compile(
     r"（[^）]{0,40}(?:≤\s*\d+\s*字|不超过\s*\d+\s*字|如[:：]|选填|择一|可不填|括号内说明)[^）]{0,20}）")
@@ -255,6 +263,41 @@ def check_vitals(text: str, need_vitals: bool) -> None:
         add(WARN, "vitals_missing", 1, "生命体征不完整，缺：" + "、".join(missing))
 
 
+def check_discharge(text: str, kind) -> None:
+    """出院记录专用检查（对应 references/discharge-summary.md 的模板要求）。"""
+    if kind != "discharge":
+        return
+    missing = [s for s in DISCHARGE_SECTIONS if s not in text]
+    if missing:
+        add(ERROR, "discharge_sections_missing", 1,
+            "出院记录缺少必备段落：" + "、".join(missing))
+    for label in SKELETON_LABELS:
+        pos = text.find(label)
+        if pos != -1:
+            add(ERROR, "skeleton_label_leak", line_no(text, pos),
+                f"正文残留思考骨架标签 {label}；成文形态必须删除全部【】标签")
+    idx = text.find("出院医嘱")
+    if idx == -1:
+        return
+    orders = text[idx:]
+    lack = [c for c in ORDER_CATEGORIES if c not in orders]
+    if lack:
+        add(WARN, "orders_categories_missing", line_no(text, idx),
+            "出院医嘱缺少类别：" + "、".join(lack))
+    if not any(w in orders for w in CLOSURE_WORDS):
+        add(WARN, "no_recheck_plan", line_no(text, idx),
+            "出院医嘱未见复查/复诊/随诊安排")
+    body = text[:idx]
+    if any(m in body for m in UNSOLVED_MARKERS) and not any(
+            w in orders for w in ("建议", "完善", "复查", "复诊", "随诊")):
+        add(WARN, "no_unsolved_closure", 1,
+            "诊疗经过存在未完成事项（拒绝/待查等），但复诊安排未给出对应出口")
+    for word in CONSULT_TONE:
+        pos = text.find(word)
+        if pos != -1:
+            add(WARN, "consult_note_copied", line_no(text, pos),
+                f"疑似照录会诊原文（「{word}」）；应转写为本院叙述：会诊科室 + 意见 + 本科采纳情况")
+
 def parse_first_dt(text: str):
     m = DT_RE.search(text)
     if not m:
@@ -326,6 +369,7 @@ def main(argv=None) -> int:
     check_diagnosis(text)
     check_signature(text, need_sig)
     check_vitals(text, need_vitals)
+    check_discharge(text, args.kind)
     check_deadline(text, args.kind, args.admit, args.record)
 
     FINDINGS.sort(key=lambda f: (_ORDER.get(f["level"], 9), f["line"]))

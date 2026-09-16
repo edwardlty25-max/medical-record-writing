@@ -8,6 +8,8 @@
     { "file": "warn-only.txt", "kind": "progress", "expect_exit": 0,
       "expect_codes": ["abbreviation", "absolute_wording"] },
     { "file": "timepoint-false-positive.txt", "kind": "progress", "expect_exit": 0,
-      "expect_codes": [] }
+      "expect_codes": [] },
+    { "file": "bad-discharge.txt", "kind": "discharge", "expect_exit": 1,
+      "expect_codes": ["discharge_sections_missing", "skeleton_label_leak", "orders_categories_missing", "no_recheck_plan", "no_unsolved_closure", "consult_note_copied"] }
   ]
 }
