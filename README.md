@@ -101,5 +101,5 @@ git clone https://github.com/edwardlty25-max/medical-record-writing.git "$env:US
 
 - 结构：`.claude-plugin/plugin.json` 与 `marketplace.json` 为 Claude 插件清单；`SKILL.md` 为主指令（快路径 + 输出契约 + 硬红线）；`assets/intake-form.md` 为输入字段清单；`references/` 为模板、规范（含「来源与核验状态」）、安全边界、示例与指南；`scripts/` 为确定性自检与工程校验；`tests/` 为回归用例；`.github/workflows/validate.yml` 为 CI。Codex 侧无需 `.claude-plugin/`，直接以目录形式加载 `SKILL.md`（另见 `AGENTS.md`）。
 - 协作：贡献前请读 `CONTRIBUTING.md`；变更记录见 `CHANGELOG.md`；规范纠错请用 issue 模板。
-- 版本：v1.14.0 · 作者 edwardlty25-max（MIT License）
+- 版本：v1.14.1 · 作者 edwardlty25-max（MIT License）
 - 卸载：删除本地安装目录即卸载（Marketplace 安装者使用 claude plugin 对应命令）。

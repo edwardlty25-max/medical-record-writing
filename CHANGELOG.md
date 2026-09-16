@@ -4,6 +4,12 @@
 
 ## [Unreleased]
 
+## [1.14.1] - 2026-09-16
+
+### Fixed
+- `references/guidelines/README.md` 通道说明补全：明确中文检索通道（Bing RSS / 360 / DuckDuckGo / 百度）全部失效的具体表现，并说明国际指南改由 PubMed E-utilities 核实。
+
+
 ## [1.14.0] - 2026-09-16
 
 ### Added
