@@ -1,7 +1,7 @@
 ---
 name: medical-record-writing
 description: 面向中国执业医师的内科病历书写加速器。当医生说“写病历”“写入院记录”“写首程”“写病程”“写查房记录”“写交班”“写出院小结”“写转科记录”“整理成病历”“这块病历帮我顺一下”“按河北规范写”，或粘贴口述、草稿、化验与检查结果要求成文时使用。默认输出可直接粘贴进 HIS 的病历正文，并自动执行规范硬红线自检（主诉≤20字、单项否决时限、计量单位、药品通用名、签名与未填占位）。病情分析、诊断依据、鉴别诊断与治疗方案属于可选旁路，仅在医生明确要求时启用。不用于患者自我诊疗。
-version: 1.15.0
+version: 1.19.0
 author: edwardlty25-max
 license: MIT
 metadata:
@@ -19,7 +19,7 @@ metadata:
 
 ## 一、用与不用
 
-- **用**：入院记录、首次病程、日常病程、上级查房、交接班、抢救、会诊、出院记录、转科与死亡记录，以及“整理成病历”“按河北规范写”“按协和逻辑写”。
+- **用**：入院记录、首次病程、日常病程、**术后与围手术期病程**、上级查房、交接班、抢救、会诊、**术前讨论与手术/介入记录**、出院记录、转科与死亡记录，以及“整理成病历”“按河北规范写”“按协和逻辑写”。
 - **可选旁路（需医生明确要求）**：诊断依据、鉴别诊断、治疗方案、解读化验单、分析病例。
 - **不用**：疑似患者或家属 → 只给一般健康信息、就医分流与危险信号，不生成个体化诊疗方案；非内科或非中国规范 → 先说明覆盖范围。
 - **急危重优先**：危急值、休克、呼吸衰竭、意识改变、活动性出血等，先提示立即临床评估，再谈成文。
@@ -46,7 +46,7 @@ metadata:
 
 ## 五、规范硬红线（出稿前必查）
 
-优先运行 `scripts/validate_note.py`（确定性机检）；无 Python 环境时按本表与 [references/rules.md](references/rules.md) 第十二节逐条自查。
+优先运行 `scripts/validate_note.py`（确定性机检）；无 Python 环境时按本表与 [references/rules.md](references/rules.md) 第十三节逐条自查。
 
 | # | 红线 | 后果 |
 |---|---|---|
@@ -60,14 +60,16 @@ metadata:
 | 8 | 诊断分初步/修正/补充/出院，按主次排序并写在规定位置（末页中线右侧/左侧） | 常见扣分 |
 | 9 | 院外检查写明机构名称、检查号、检查日期 | 常见扣分 |
 | 10 | 知情同意书须签署意见（如“同意手术”），不能只签名 | 法律风险 |
+| 11 | 有手术者：术后当日须有首次术后病程记录，术后 1、2、3 天连续记录；手术经过写「详见手术记录」，不重复术式细节；出院记录须写出院前切口或局部愈合情况 | 常见扣分 |
 
 ## 六、文书路由（按需读取，不预加载）
 
 | 文书或任务 | 必读资源 |
 |---|---|
 | 入院、再次或多次入院、24 小时内入出院或死亡记录 | [references/admission-note.md](references/admission-note.md) |
-| 首次病程记录 | [references/first-progress-note.md](references/first-progress-note.md) |
-| 日常病程、上级查房、交接班、抢救、会诊 | [references/progress-note.md](references/progress-note.md) |
+| **病程与首程：原则 + 模板一页版（想快就看这个）** | [references/progress-and-first-note-principles.md](references/progress-and-first-note-principles.md) |
+| 首次病程记录（展开说明） | [references/first-progress-note.md](references/first-progress-note.md) |
+| 日常病程、上级查房、交接班、抢救、会诊、**术前小结与术前病程** | [references/progress-note.md](references/progress-note.md) |
 | 病程记录复核清单（常见缺陷、输出字段） | [references/progress-checklist.md](references/progress-checklist.md) |
 | 出院记录（书写逻辑 + 两形态模板） | [references/discharge-summary.md](references/discharge-summary.md) |
 | 出院记录复核清单（易漏要素、常见缺陷、输出字段） | [references/discharge-checklist.md](references/discharge-checklist.md) |
@@ -75,9 +77,11 @@ metadata:
 | 格式、时限、签名、修改与质控；规范来源与核验状态 | [references/rules.md](references/rules.md) |
 | 优秀病历标准与内涵质量（逐文书逻辑见对应模板） | [references/pumch-style.md](references/pumch-style.md) |
 | 输入字段清单 | [assets/intake-form.md](assets/intake-form.md) |
-| 成稿样式示例（虚构数据） | 日常病程 [daily-progress-example.md](references/examples/daily-progress-example.md) · 首程 [first-progress-example.md](references/examples/first-progress-example.md) · 出院 [discharge-example.md](references/examples/discharge-example.md) |
+| 成稿样式示例（虚构数据） | 日常病程 [daily-progress-example.md](references/examples/daily-progress-example.md) · 首程 [first-progress-example.md](references/examples/first-progress-example.md) · 出院 [discharge-example.md](references/examples/discharge-example.md) · **术后首次病程 [postop-progress-example.md](references/examples/postop-progress-example.md)** · **有手术的出院记录 discharge-with-procedure-example.md** · **有手术计划的首程 first-progress-with-plan-example.md** · **术前小结与主任查房 preop-summary-and-rounds-example.md** |
 
 **最常用的一种写法（日常病程）**：客观输入（一般情况 / 查体 / 检查 / 会诊）原样整合 → 由本技能补足“分析判断 + 诊疗计划 + 医患沟通” → 成一段通顺文字。重病或病情变化当日必记，不得只写“病情平稳、继续原治疗”。
+
+**做手术的病例要额外守住三处**：① 术后**当日**必须有首次术后病程记录，术后第 1、2、3 天连续记录（漏了这段，手术记录再漂亮也不算完整）；② **修正/补充诊断**必须在病程中留痕（诊断名称 + 依据 + 时间 + 对治疗的影响 + 签名）；③ 患者**拒绝**检查或治疗必须写清“建议什么、拒绝什么、告知了什么风险、替代方案、随访出口”。详见 [references/progress-note.md](references/progress-note.md) 第七至第九节。
 
 ## 七、可选旁路：病情分析与治疗（默认关闭）
 
@@ -103,7 +107,7 @@ metadata:
 
 ## 九、参考文件索引
 
-- 写作：[references/rules.md](references/rules.md)、[references/pumch-style.md](references/pumch-style.md)、[references/progress-note.md](references/progress-note.md) 等模板文件
+- 写作：[references/progress-and-first-note-principles.md](references/progress-and-first-note-principles.md)（一页版原则与模板）、[references/rules.md](references/rules.md)、[references/pumch-style.md](references/pumch-style.md)、[references/progress-note.md](references/progress-note.md)、references/procedure-record.md 等
 - 输入与示例：[assets/intake-form.md](assets/intake-form.md)、[references/examples/daily-progress-example.md](references/examples/daily-progress-example.md)
 - 分析：[references/case-analysis.md](references/case-analysis.md)、[references/clinical-diagnosis.md](references/clinical-diagnosis.md)、[references/clinical-reasoning-treatment.md](references/clinical-reasoning-treatment.md)
 - 指南：[references/guidelines/](references/guidelines/README.md)（10 个亚专业）

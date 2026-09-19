@@ -6,6 +6,8 @@
     python scripts/validate_note.py note.md
     python scripts/validate_note.py note.md --kind progress
     python scripts/validate_note.py note.md --kind first-progress --admit "2026-09-16 08:00"
+    python scripts/validate_note.py 手术记录.txt --kind procedure
+    python scripts/validate_note.py 术前讨论.txt --kind preop-discussion
     python scripts/validate_note.py note.md --json
     Get-Content note.md -Raw | python scripts/validate_note.py -
 
@@ -63,7 +65,6 @@ BRAND_NAMES = {
 }
 
 ABBREVIATIONS = {
-    "PTCA": "经皮冠状动脉腔内成形术", "PCI": "经皮冠状动脉介入治疗",
     "CABG": "冠状动脉旁路移植术", "COPD": "慢性阻塞性肺疾病",
     "ACS": "急性冠脉综合征", "T2DM": "2型糖尿病", "CKD": "慢性肾脏病",
     "NSAIDs": "非甾体抗炎药", "DKA": "糖尿病酮症酸中毒",
@@ -80,7 +81,8 @@ DIAGNOSIS_WORDS = (
 ABSOLUTE_WORDS = ("一定", "完全排除", "明确无误", "肯定为", "100%", "绝对")
 VAGUE_NEGATIVES = ("无异常", "(-)", "（-）", "(－)", "（－）")
 DIAGNOSIS_TYPES = ("初步诊断", "修正诊断", "补充诊断", "出院诊断", "入院诊断",
-                   "目前诊断", "死亡诊断", "最后诊断")
+                   "目前诊断", "死亡诊断", "最后诊断", "术前诊断", "术中诊断",
+                   "术后诊断")
 
 DATE_KINDS = ("progress", "first-progress", "admission", "admission-readmission",
               "rounds-critical", "rounds-attending", "rounds-director",
@@ -110,6 +112,71 @@ TIME12_RE = re.compile(r"(上午|下午|晚上|凌晨|中午)\s*\d{1,2}")
 HOUR_RE = re.compile(r"(?<![\d.（(])(\d{1,2})\s*[点时]")
 TEMP_RE = re.compile(r"(?:体温|(?<![A-Za-z0-9])T)\s*[:：]?\s*\d{2}(?:\.\d)?")
 BP_RE = re.compile(r"(?:血压|(?<![A-Za-z])BP)\s*[:：]?\s*\d{2,3}\s*/\s*\d{2,3}")
+
+# ---- 围手术期 / 手术记录专用规则（对应 references/procedure-record.md） ----
+
+
+
+
+
+
+
+CONSENT_OPINION_RE = re.compile(
+    r"(签署意见|签字为证|家属签字|患者签字|已签字|同意手术|同意操作|同意置入|"
+    r"(?:患者|家属|家属表示|患者表示|其)[^。；\n]{0,12}同意|自愿(?:接受|要求))")
+
+PREOP_SUMMARY_RE = re.compile(r"术前小结|术前病程记录|术前记录")
+PREOP_INDICATION_RE = re.compile(r"(手术指征|指征|必要性)")
+PREOP_PREP_RE = re.compile(r"(术前准备|术前检查|禁食|备血|皮肤准备|抗凝|停药|桥接|碘过敏)")
+PREOP_RISK_RE = re.compile(r"(手术风险|风险评估|出血|感染|麻醉风险|防范|并发症)")
+CONSENT_OPINION_ONLY_RE = re.compile(r"(签署意见|同意手术|同意操作|签字为证|家属签字|患者签字)")
+
+
+
+PREOP_WORKUP_RE = re.compile(
+    r"(术前检查|术前评估|术前准备|入院后.{0,12}(?:检查|化验|复查)|完善.{0,10}(?:检查|化验)|"
+    r"凝血功能|凝血四项|感染筛查|超声心动图|心脏超声|胸部 CT|胸部CT|胸部摄片|肺功能)")
+EXAM_MARKER_RE = re.compile(
+    r"(心电图|超声心动图|心脏超声|肌钙蛋白|高敏肌钙蛋白|心肌损伤标志物|肌酸激酶|血肌酐|肌酐|"
+    r"eGFR|电解质|血钾|血常规|凝血|肝功能|血脂|CTA|磁共振|CT|造影|"
+    r"射血分数|LVEF|动态心电图)")
+PERIOP_MARKER_RE = re.compile(
+    r"(术后|术前|手术记录|手术经过|术中|手术当日|手术治疗|有创操作)")
+MED_RECONCILE_NOTE_RE = re.compile(r"(核对|以医嘱|医嘱为准|请确认|存疑|待医生确认|一致)")
+
+# ---- 围手术期 / 病程相关常量 ----
+POSTOP_PROGRESS_RE = re.compile(r"(术后病程|术后第 ?[一二三四五六七八九十\d]+ ?[天日]|术后当日|术后第一天)")
+POSTOP_EXAM_RE = re.compile(r"(切口|伤口|引流|敷料|渗血|渗液|红肿|末梢|局部)")
+POSTOP_REVIEW_RE = re.compile(r"(心肌损伤|肌钙蛋白|BNP|肾功能|肌酐|电解质|血常规|凝血|心电图)")
+DIAGNOSIS_CHANGE_RE = re.compile(r"(修正诊断|补充诊断|诊断修正|诊断变更|更改诊断)")
+DIAGNOSIS_BASIS_RE = re.compile(
+    r"(依据(?!诊断)|根据|检查示|检查提示|复查|证实|结果示|报告示|"
+    r"CT|磁共振|MRI|超声|心电图|肌钙蛋白|阳性|阴性|升高|下降|提示|考虑)")
+DIAGNOSIS_FILLER_RE = re.compile(r"(考虑|诊断|明确|病情需要|结合临床表现|进一步明确)")
+REFUSAL_RE = re.compile(r"(拒绝|不同意|自动出院|自行离院)")
+REFUSAL_INFORM_RE = re.compile(r"(告知|已告知|交代|交待|说明|知情)")
+REFUSAL_ALTERNATIVE_RE = re.compile(r"(替代|替代方案|改为|继续目前|随访|复查|观察)")
+CONSULT_LEAD_RE = re.compile(
+    r"((?:[\u4e00-\u9fff]{2,8}科)[^。；\n]{0,12}(?:会诊|随诊|建议))")
+CONSULT_ADOPT_RE = re.compile(
+    r"(采纳|已执行|执行|已加用|已予|已给|按会诊意见|暂不执行|未采纳|同意会诊|"
+    r"暂不加用|暂不加|暂予|暂按|已调整|已改|遵会诊|结合会诊|依会诊|"
+    r"患者拒绝|家属拒绝|已告知|未执行|经[^。；\n]{0,10}会诊后)")
+STATINS = ("阿托伐他汀", "瑞舒伐他汀", "辛伐他汀", "普伐他汀", "氟伐他汀", "匹伐他汀", "洛伐他汀")
+DRUG_DOSE_PAIRS = (
+    ("阿托伐他汀", ("10mg", "20mg", "40mg", "80mg", "10 mg", "20 mg", "40 mg", "80 mg")),
+    ("瑞舒伐他汀", ("5mg", "10mg", "20mg", "5 mg", "10 mg", "20 mg")),
+    ("阿司匹林", ("75mg", "100mg", "75 mg", "100 mg")),
+    ("替格瑞洛", ("90mg", "60mg", "90 mg", "60 mg", "180mg", "180 mg")),
+    ("氯吡格雷", ("75mg", "75 mg", "300mg", "300 mg")),
+    ("美托洛尔", ("25mg", "47.5mg", "50mg", "95mg", "25 mg", "47.5 mg", "50 mg")),
+    ("氨氯地平", ("2.5mg", "5mg", "10mg", "2.5 mg", "5 mg", "10 mg")),
+    ("呋塞米", ("20mg", "40mg", "20 mg", "40 mg")),
+    ("螺内酯", ("20mg", "25mg", "20 mg", "25 mg")),
+)
+MED_RECONCILE_NOTE_RE = re.compile(r"(核对|以医嘱|医嘱为准|请确认|存疑|待医生确认|一致)")
+VESSEL_NAMES = ()
+UNTREATED_BASIS = ()
 
 FINDINGS: list[dict] = []
 
@@ -233,7 +300,7 @@ def check_wording(text: str) -> None:
 
 
 def check_diagnosis(text: str) -> None:
-    if re.search(r"诊断\s*[:：]", text) and not any(t in text for t in DIAGNOSIS_TYPES):
+    if re.search(r"(初步诊断|诊断)\s*[:：]", text) and not any(t in text for t in DIAGNOSIS_TYPES):
         add(WARN, "diagnosis_type", 1,
             "诊断未注明分类（初步/修正/补充/出院）；入院记录须写「初步诊断」")
 
@@ -304,14 +371,134 @@ def check_discharge(text: str, kind) -> None:
             add(WARN, "consult_note_copied", line_no(text, pos),
                 f"疑似照录会诊原文（「{word}」）；应转写为本院叙述：会诊科室 + 意见 + 本科采纳情况")
 
+
+def check_perioperative(text: str, kind) -> None:
+    """围手术期前后呼应（病程 / 出院记录）。"""
+    if kind not in ("progress", "rounds-attending", "rounds-critical", "rounds-director", "discharge"):
+        return
+    if not PERIOP_MARKER_RE.search(text):
+        return
+    if PREOP_SUMMARY_RE.search(text) and not POSTOP_PROGRESS_RE.search(text):
+        return    # 术前小结/术前病程：本就不该含术后病程
+    is_postop_record = bool(POSTOP_PROGRESS_RE.search(text))
+    if not is_postop_record and re.search(r"术[后前][^\n]{0,20}(?:手术|操作|治疗)经过[^\n]{0,10}详见手术记录", text):
+        is_postop_record = True
+    if not is_postop_record and re.search(r"今[日天][^\n]{0,40}行[^\n]{0,20}(?:手术|操作|治疗|术)", text):
+        is_postop_record = True
+    if not is_postop_record:
+        add(WARN, "postop_progress_missing", 1,
+            "正文涉及手术，但未见术后病程记录（术后当日须有首次术后病程，此后连续记录）")
+    if not POSTOP_EXAM_RE.search(text):
+        add(WARN, "postop_exam_missing", 1,
+            "术后记录未见切口或引流等局部观察要素（渗血、渗液、红肿、局部循环与感觉）")
+    if not POSTOP_REVIEW_RE.search(text):
+        add(WARN, "postop_recheck_missing", 1,
+            "术后记录未见复查项目（心肌损伤标志物/肾功能与电解质/血常规/凝血/心电图等）")
+    if kind == "discharge" and not any(k in text for k in ("切口", "伤口", "愈合", "引流")):
+        add(WARN, "perioperative_no_outcome", 1,
+            "有手术/介入，但出院记录未见切口或局部愈合情况的出院前评估")
+    if kind != "discharge":
+        return
+    # 检查位置预留：出院记录要有承载术前检查与术后复查的位置
+    _seg = lambda a, b: (text[text.find(a): text.find(b)] if (a in text and b in text and text.find(a) < text.find(b)) else "")
+    seg_adm = _seg("入院情况", "入院诊断")
+    seg_course = _seg("诊疗经过", "出院诊断")
+    seg_status = _seg("出院情况", "出院医嘱")
+    if not seg_course:
+        return
+    if not EXAM_MARKER_RE.search(seg_adm) and not (
+            PREOP_WORKUP_RE.search(seg_course[:len(seg_course) // 2])
+            or re.search(r"术前[^。；\n]{0,30}", seg_course)):
+        add(WARN, "preop_exam_location_missing", 1,
+            "入院情况与诊疗经过前半段均未见术前检查/术前评估内容；"
+            "支持手术指征的术前检查应写在此处，不能只说「具备手术指征」")
+    if EXAM_MARKER_RE.search(seg_status):
+        add(WARN, "exam_in_discharge_status", 1,
+            "出院情况段出现检查结果；该段只写症状、生命体征、查体、功能状态与待办检查，"
+            "检查结果应移至诊疗经过（术后复查或出院前复查）")
+
+
+def check_diagnosis_revision(text: str) -> None:
+    """修正/补充诊断五要素（诊断名称 + 依据 + 时间 + 对治疗的影响 + 签名）。"""
+    m = DIAGNOSIS_CHANGE_RE.search(text)
+    if not m:
+        return
+    # 只看诊断变更所在那一段（前后各有限字符），避免被全文其他内容掩盖
+    seg = text[max(0, m.start() - 120): m.end() + 400]
+    if not DIAGNOSIS_BASIS_RE.search(seg):
+        add(WARN, "diagnosis_revision_no_basis", line_no(text, m.start()),
+            "出现修正/补充诊断，但该段未见具体依据（检查项目、数值与时间）；诊断变更必须留痕")
+    seg_compact = re.sub(r"\s", "", seg)
+    if not DT_RE.search(seg) and not re.search(r"\d{1,2}月\d{1,2}日", seg_compact):
+        add(WARN, "diagnosis_revision_no_time", line_no(text, m.start()),
+            "修正/补充诊断未见日期/时间；须注明依据的发现时间与记录日期")
+
+
+def check_refusal(text: str) -> None:
+    """患者拒绝检查/治疗的六要素留痕。"""
+    for m, ln in each(text, REFUSAL_RE):
+        seg = text[max(0, m.start() - 220): m.end() + 220]
+        missing = []
+        if not REFUSAL_INFORM_RE.search(seg):
+            missing.append("已告知的风险")
+        if not REFUSAL_ALTERNATIVE_RE.search(seg):
+            missing.append("替代方案或随访安排")
+        if missing:
+            add(WARN, "refusal_unstated", ln,
+                "记录到患者拒绝，但同一段未见：" + "、".join(missing)
+                + "；拒绝须写清「告知了什么 + 拒绝什么 + 后果 + 替代方案 + 随访出口」")
+
+
+def check_consult_closing(text: str) -> None:
+    """会诊意见须有本科采纳情况。"""
+    if not CONSULT_LEAD_RE.search(text):
+        return
+    if not CONSULT_ADOPT_RE.search(text):
+        add(WARN, "consult_no_adoption", 1,
+            "提到他科会诊/建议，但未见本科采纳情况；应写「会诊科室 + 意见 + 本科采纳/不采纳及理由」")
+
+
+def check_med_reconciliation(text: str) -> None:
+    """同一药物出现两种写法或两个剂量（跨全文比对），提示逐条核对。"""
+    present = [s for s in STATINS if s in text]
+    if len(present) > 1 and not MED_RECONCILE_NOTE_RE.search(text):
+        add(WARN, "med_reconciliation_risk", 1,
+            "全文出现两种他汀类（" + "、".join(present) + "）；须以医嘱执行记录为准统一写法，"
+            "或并列呈现请医生确认（不得自行取舍）")
+    for generic, doses in DRUG_DOSE_PAIRS:
+        if generic not in text:
+            continue
+        hits = {d for d in doses if d in text}
+        if len(hits) > 1 and not MED_RECONCILE_NOTE_RE.search(text):
+            add(WARN, "med_reconciliation_risk", 1,
+                f"{generic} 出现多个剂量（" + "、".join(sorted(hits)) + "）；须核对医嘱后统一")
+
+
+
+def check_rounds_increment(text: str, kind) -> None:
+    """上级查房记录：分析要有增量、指示要有落实。"""
+    if kind not in ("rounds-attending", "rounds-critical", "rounds-director"):
+        return
+    if not re.search(r"(考虑|结合|提示|支持|复查|检查示|分析|认为)", text):
+        add(WARN, "rounds_no_analysis", 1,
+            "上级查房记录未见分析依据（依据→判断→决策）；不得只复述病情与「继续观察」")
+    if not re.search(r"(建议|指示|同意|调整|加用|停用|改为|计划|择期|继续(?!观察|目前))", text):
+        add(WARN, "rounds_no_decision", 1,
+            "上级查房记录未见明确的诊疗决策或下一步安排")
+    if "查房意见" in text and not re.search(r"(已执行|已按|已加用|已调整|已予|当日执行|落实情况)", text):
+        add(WARN, "rounds_no_followthrough", 1,
+            "提到「查房意见」但未见落实记录；应在当日或次日病程写明「已按查房意见执行××」")
+
+
 def check_required_elements(text: str, kind) -> None:
     """易漏要素：过敏史、输血反应。"""
     if kind in ALLERGY_KINDS and "过敏" not in text:
         add(WARN, "allergy_history_missing", 1,
-            "未见过敏史记录；既往史/入院情况须明确药物与食物过敏史（无则写“无”）")
+            "未见过敏史记录；既往史/入院情况须明确药物与食物过敏史（无则写「无」）")
     if BLOOD_PRODUCT_RE.search(text) and not BLOOD_REACTION_RE.search(text):
         add(WARN, "transfusion_reaction_unstated", 1,
             "记录了输血/输注血制品，但未见有无输血反应的描述")
+
 
 def parse_first_dt(text: str):
     m = DT_RE.search(text)
@@ -385,6 +572,12 @@ def main(argv=None) -> int:
     check_signature(text, need_sig)
     check_vitals(text, need_vitals)
     check_discharge(text, args.kind)
+    check_perioperative(text, args.kind)
+    check_diagnosis_revision(text)
+    check_rounds_increment(text, args.kind)
+    check_refusal(text)
+    check_consult_closing(text)
+    check_med_reconciliation(text)
     check_required_elements(text, args.kind)
     check_deadline(text, args.kind, args.admit, args.record)
 

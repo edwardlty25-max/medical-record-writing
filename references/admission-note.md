@@ -100,7 +100,8 @@ history_source: {name: "", relation: "", reliability: ""}
 chief_complaint: ""        # ≤20 字，症状+部位+时间
 present_illness: ""
 past_history: {diseases: "", surgery: "", transfusion: "", allergy: "", infection: "", vaccination: ""}
-personal_history: ""; marital_history: ""; family_history: ""
+personal_history: ""
+family_history: ""
 vitals: {T: "", P: "", R: "", BP: "", weight: ""}
 exam: {skin: "", nodes: "", head_neck: "", chest: "", abdomen: "", spine_limbs: "", nervous: "", specialty: ""}
 aux_exams: [{date: "", item: "", result: "", unit: "", ref: "", institution: "", report_no: ""}]

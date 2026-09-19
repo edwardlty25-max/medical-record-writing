@@ -12,3 +12,5 @@ desktop.ini
 *.pem
 *.key
 .env
+__pycache__/
+*.pyc

@@ -21,14 +21,17 @@
 python scripts/validate_note.py 正文.txt --kind progress --admit "2026-09-16 08:00"
 ```
 
-`--kind` 取 `admission` / `admission-readmission` / `first-progress` / `progress` / `rounds-critical` / `rounds-attending` / `rounds-director` / `handover` / `rescue` / `consultation` / `discharge` / `death` / `death-discussion` / `transfer`。退出码 `1` 表示存在 ERROR 级问题；`--json` 便于接入脚本。
+`--kind` 取 `admission` / `admission-readmission` / `first-progress` / `progress` / `rounds-critical` / `rounds-attending` / `rounds-director` / `handover` / `rescue` / `consultation` / `discharge` / `death` / `death-discussion` / `transfer` / `procedure` / `preop-discussion`。退出码 `1` 表示存在 ERROR 级问题；`--json` 便于接入脚本。
+
+围手术期另有一组确定性检查（术后病程是否写成、切口或引流等局部观察是否描述、术后复查项目是否记录、出院前愈合情况、出院带药一致性、诊断变更留痕、患者拒绝留痕、会诊采纳情况等）。
 
 ## 支持的文书类型（默认路径）
 
 | 文书 | 模板 |
 |---|---|
 | 入院记录（四类） | references/admission-note.md |
-| 首次病程记录 | references/first-progress-note.md |
+| **病程与首程：原则 + 模板一页版** | references/progress-and-first-note-principles.md |
+| 首次病程记录（展开说明） | references/first-progress-note.md |
 | 日常病程记录、上级查房、交接班、抢救、会诊 | references/progress-note.md |
 | 出院记录（书写逻辑 + 两形态模板） | references/discharge-summary.md |
 | 出院记录复核清单（易漏要素、常见缺陷、字段） | references/discharge-checklist.md |
@@ -37,7 +40,7 @@ python scripts/validate_note.py 正文.txt --kind progress --admit "2026-09-16 0
 | 书写规范（2013 年版规范 + 协和逻辑） | references/rules.md |
 | 协和病历书写逻辑专题 | references/pumch-style.md |
 | 输入字段清单 | assets/intake-form.md |
-| 成稿示例（虚构数据） | daily-progress-example.md · first-progress-example.md · discharge-example.md（references/examples/） |
+| 成稿示例（虚构数据） | daily-progress-example.md · first-progress-example.md · discharge-example.md · **postop-progress-example.md（术后首次病程）** · **discharge-with-procedure-example.md（有手术的出院记录）**（references/examples/） |
 
 ## 可选旁路（分析与治疗）
 
@@ -99,5 +102,5 @@ git clone https://github.com/edwardlty25-max/medical-record-writing.git "$env:US
 ## 开发说明
 
 - 结构：`.claude-plugin/` 为 Claude 插件清单；`SKILL.md` 为主指令（快路径 + 输出契约 + 硬红线）；`assets/` 为输入字段清单与快用卡；`references/` 为模板、规范（含「来源与核验状态」）、安全边界、示例与指南；`scripts/validate_note.py` 为确定性自检。Codex 等按目录加载 `SKILL.md` 即可，无需插件清单。
-- 版本：v1.15.0 · 作者 edwardlty25-max（MIT License）
+- 版本：v1.19.0 · 作者 edwardlty25-max（MIT License）
 - 卸载：删除本地安装目录即卸载（Marketplace 安装者使用 claude plugin 对应命令）。

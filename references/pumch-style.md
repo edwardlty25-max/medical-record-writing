@@ -22,7 +22,8 @@
 |---|---|---|
 | 入院记录（含再次/多次入院） | [admission-note.md](admission-note.md) | 同左 |
 | 首次病程记录 | [first-progress-note.md](first-progress-note.md) | 同左 |
-| 日常病程、上级查房、交接班、抢救、会诊 | [progress-note.md](progress-note.md) | 同左 |
+| 日常病程、上级查房、交接班、抢救、会诊、术后病程 | [progress-note.md](progress-note.md) | 同左 |
+| 术前讨论、手术记录、介入操作记录 | procedure-record.md | 同左 |
 | 出院记录 | [discharge-summary.md](discharge-summary.md) | 同左 |
 | 转科、死亡记录、死亡讨论 | [transfer-and-death.md](transfer-and-death.md) | 同左 |
 | 时限、签名、修改与质控 | [rules.md](rules.md) | — |
